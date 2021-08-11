@@ -3,7 +3,7 @@ import {promises}  from 'fs';
 const { readFile, writeFile, unlink } = promises;
 const app = express();
 
-const vistas = {items:0, item:0}
+const visits = {items:0, item:0}
 const getData = async()=>{
     const dataJSON =  await readFile("./data/archivo.txt"); 
     return JSON.parse(dataJSON);
@@ -11,11 +11,11 @@ const getData = async()=>{
 
 app.get("/items", async(req, res)=>{
     try {
-        vistas.items++;
+        visits.items++;
         const d = await getData();
         const data = {
             items:d,
-            cantidad:d.length
+            amounth:d.length
         }
         res.send(data);
      } catch (err) {
@@ -25,19 +25,19 @@ app.get("/items", async(req, res)=>{
 
 app.get("/item-random", async(req, res)=>{
     try {
-        vistas.item++;
+        visits.item++;
         const d = await getData();
-        const n = Math.round(Math.random()*d.length);
+        const n = Math.round(Math.random()*(d.length-1));
         res.send({item:d[n]});
      } catch (err) {
          console.log("error: "+err.message);
      }   
 })
 
-app.get("/visitas", async(req, res)=>{
-    res.send({visitas:vistas});  
+app.get("/visits", async(req, res)=>{
+    res.send({visits});  
 })
 
 const PORT =8080
-const server = app.listen(PORT,()=>console.log(`App coriendo en el puerto ${PORT}`));
-server.on("error", err=>console.log(`Error en el servidor: ${err}`));
+const server = app.listen(PORT,()=>console.log(`App is running on port ${PORT}`));
+server.on("error", err=>console.log(`Error on server: ${err}`));
