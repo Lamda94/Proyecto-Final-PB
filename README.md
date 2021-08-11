@@ -1,4 +1,4 @@
-# Proyecto final del curso programacion Back End en CoderHouse
+# Proyecto final del curso programacion Backend en CoderHouse
 
 ## Instalacion
 
