@@ -2,7 +2,7 @@
 
 ## Instalacion
 
-Para instalar las dependencias necesarias para la correcta ejecución ejecutamos el comando.
+Para instalar las dependencias necesarias para la correcta ejecución del proyecto ejecutamos el comando.
 
 ```bash
 npm install
