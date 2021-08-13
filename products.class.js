@@ -4,23 +4,15 @@ class Product {
     }
 
     getProducts(){
-        if (this.products.length == 0) {
-            return({status:400, data:{error:"No hay productos cargados"}});
-        } else {
-            return({status:200, data:this.products});
-        }
+        return this.products;
     }
 
-   getProduct(id){
-        if (this.products.length == 0) {
-            return({status:400, data:{error:"No hay productos cargados"}});
-        } else {
-            const product = this.products.find(p=>p.id==id);
-            if (product == undefined) {
-                return({status:400, data:{error:"Producto no encontrado"}});
-            }
-            return({status:200, data:product});
+   getProduct(id){        
+        const product = this.products.find(p=>p.id==id);
+        if (product == undefined) {
+            return [];
         }
+        return product;
     }
 
     saveProduct(data){
@@ -30,7 +22,7 @@ class Product {
         }           
         data.id=id;    
         this.products.push(data);
-        return({status:200, data});
+        return data;
     }
 }
 
