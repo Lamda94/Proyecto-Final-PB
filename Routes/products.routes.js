@@ -3,6 +3,10 @@ import product from "../Class/products.class.js";
 
 const products = express.Router();
 
+products.get("/",(req,res)=>{ 
+    res.render("main.hbs",{hola:"Hola Mundo"});
+});
+
 products.get("/products/list",(req,res)=>{ 
     const response = product.getProducts();
     if (response.length == 0) {        
