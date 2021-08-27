@@ -3,17 +3,20 @@ import product from "../Class/products.class.js";
 
 const products = express.Router();
 
-products.get("/",(req,res)=>{ 
-    res.render("main.hbs",{hola:"Hola Mundo"});
+products.get("/products",(req,res)=>{ 
+    const data = {
+        new: true,
+    }
+    res.render("main.hbs", data);
 });
 
 products.get("/products/list",(req,res)=>{ 
     const response = product.getProducts();
-    if (response.length == 0) {        
-        res.status(400).json({error:"No hay productos cargados"});
-    } else {
-        res.status(200).json(response);
+    const data = {
+        list:true,
+        data: response,
     }
+    res.render("main.hbs", data);
 });
 
 products.get("/products/list/:id", (req,res)=>{
@@ -33,7 +36,8 @@ products.post("/products/save",(req,res)=>{
         thumbnail: req.body.thumbnail
     }
     const response = product.saveProduct(data);
-    res.status(200).json(response);
+    //res.status(200).json(response);
+    res.redirect('/api/products/list');
 });
 
 products.delete("/product/delete/:id", (req, res)=>{
