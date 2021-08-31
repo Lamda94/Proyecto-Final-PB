@@ -6,17 +6,19 @@ const products = express.Router();
 products.get("/products",(req,res)=>{ 
     const data = {
         new: true,
+        list: false
     }
-    res.render("main.hbs", data);
+    res.render("index.pug", data);
 });
 
 products.get("/products/list",(req,res)=>{ 
     const response = product.getProducts();
     const data = {
+        new:false,
         list:true,
         data: response,
     }
-    res.render("main.hbs", data);
+    res.render("index.pug", data);
 });
 
 products.get("/products/list/:id", (req,res)=>{
@@ -37,7 +39,7 @@ products.post("/products/save",(req,res)=>{
     }
     const response = product.saveProduct(data);
     //res.status(200).json(response);
-    res.redirect('/api/products/list');
+    res.redirect('/api/products');
 });
 
 products.delete("/product/delete/:id", (req, res)=>{
