@@ -8,7 +8,7 @@ products.get("/products",(req,res)=>{
         new: true,
         list: false
     }
-    res.render("index.pug", data);
+    res.render("index.ejs", data);
 });
 
 products.get("/products/list",(req,res)=>{ 
@@ -18,7 +18,7 @@ products.get("/products/list",(req,res)=>{
         list:true,
         data: response,
     }
-    res.render("index.pug", data);
+    res.render("index.ejs", data);
 });
 
 products.get("/products/list/:id", (req,res)=>{
