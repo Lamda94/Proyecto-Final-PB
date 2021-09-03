@@ -54,4 +54,4 @@ class Product {
 
 const product = new Product();
 
-export default product;
+module.exports = product;
