@@ -1,12 +1,11 @@
 const express = require("express");
 const {product} = require("../Class/products.class.js");
-const io = require("socket.io");
+const io = require("socket.io")(8080);
 
 const products = express.Router();
-const socket = io.connect();
 
 products.get("/products",(req,res)=>{ 
-    socket.on("productList", (data) => {
+    io.on("productList", (data) => {
         res.render("main.hbs", data);
     });
 });
@@ -55,4 +54,4 @@ products.put("/product/update/:id", (req,res)=>{
     res.status(200).json(response);
 });
 
-module.export = products;
+module.exports = products;

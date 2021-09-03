@@ -1,4 +1,5 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const server = require('http').createServer(app);
 const products = require("./Routes/products.routes.js");
 const handlebars = require("express-handlebars");
