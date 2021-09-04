@@ -54,4 +54,4 @@ class Product {
 
 const product = new Product();
 
-module.exports = product;
+module.exports = {product};

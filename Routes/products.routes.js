@@ -1,13 +1,12 @@
 const express = require("express");
 const {product} = require("../Class/products.class.js");
-const io = require("socket.io")(8080);
-
 const products = express.Router();
 
+const url = __dirname.replace("\\Routes","");
+
+
 products.get("/products",(req,res)=>{ 
-    io.on("productList", (data) => {
-        res.render("main.hbs", data);
-    });
+    res.sendFile(url+"/public/index.html");
 });
 
 products.get("/products/list/:id", (req,res)=>{
@@ -26,7 +25,7 @@ products.post("/products/save",(req,res)=>{
         price: req.body.price,
         thumbnail: req.body.thumbnail
     }
-    socket.emit("new-product", data);
+    const response = product.saveProduct(data);
     //res.status(200).json(response);
     res.redirect('/api/products');
 });

@@ -6,10 +6,9 @@ const handlebars = require("express-handlebars");
 const {product} = require("./Class/products.class.js");
 const ioServer = require("socket.io")(server);
 
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 const ENGINE_NAME = "hbs";
 
@@ -34,13 +33,12 @@ server.on("error", err=>console.log(`Error on server: ${err}`));
 
 
 ioServer.on("connection", (socket) => {
-    let products = product.getProducts();
-    console.log("Un cliente se ha conectado");
-    socket.emit("productList", products);
-  
-    socket.on("new-product", (data) => {
-      const response = product.saveProduct(data);
-      products = product.getProducts();
-      ioServer.sockets.emit("productList", products);
-    });
-  });
+  let products = product.getProducts();
+  console.log("Un cliente se ha conectado");
+  socket.emit("productList", products);
+  socket.on("refresh",(data)=>{   
+    products = product.getProducts(); 
+    console.log(products);
+    ioServer.sockets.emit("productList", products);
+  })
+});
