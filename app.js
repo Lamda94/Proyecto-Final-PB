@@ -1,5 +1,4 @@
 const handlebars = require("express-handlebars");
-const {product} = require("./Class/products.class.js");
 const products = require("./Routes/products.routes.js");
 
 const { ioServer, app, server} = require("./Server/Server");
@@ -26,7 +25,4 @@ server.listen(PORT, ()=>console.log(`App start on http://localhost:8080`));
 server.on("error", err=>console.log(`Error on server: ${err}`));
 
 
-ioServer.on("connection", (socket) => {
-  let products = product.getProducts();
-  socket.emit("productList", products);
-});
+
