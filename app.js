@@ -1,14 +1,8 @@
-const express = require('express');
-const app = express();
-const server = require('http').createServer(app);
-const products = require("./Routes/products.routes.js");
 const handlebars = require("express-handlebars");
 const {product} = require("./Class/products.class.js");
-const ioServer = require("socket.io")(server);
+const products = require("./Routes/products.routes.js");
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.use(express.static(`${__dirname}/public`));
+const { ioServer, app, server} = require("./Server/Server");
 
 const ENGINE_NAME = "hbs";
 
@@ -28,17 +22,11 @@ app.set("views", "./views");
 app.use("/api", products);
 
 const PORT = 8080;
-server.listen(PORT,()=>console.log(`App start on http://localhost:8080`));
+server.listen(PORT, ()=>console.log(`App start on http://localhost:8080`));
 server.on("error", err=>console.log(`Error on server: ${err}`));
 
 
 ioServer.on("connection", (socket) => {
   let products = product.getProducts();
-  console.log("Un cliente se ha conectado");
   socket.emit("productList", products);
-  socket.on("refresh",(data)=>{   
-    products = product.getProducts(); 
-    console.log(products);
-    ioServer.sockets.emit("productList", products);
-  })
 });

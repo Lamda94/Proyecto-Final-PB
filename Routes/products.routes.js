@@ -1,6 +1,7 @@
 const express = require("express");
 const {product} = require("../Class/products.class.js");
 const products = express.Router();
+const { ioServer} = require("../Server/Server");
 
 const url = __dirname.replace("\\Routes","");
 
@@ -26,7 +27,9 @@ products.post("/products/save",(req,res)=>{
         thumbnail: req.body.thumbnail
     }
     const response = product.saveProduct(data);
-    //res.status(200).json(response);
+    let products = product.getProducts();
+    ioServer.sockets.emit("productList", products);
+        
     res.redirect('/api/products');
 });
 

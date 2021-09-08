@@ -33,7 +33,7 @@
                         <input type="text" class="form-control" name="thumbnail">
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" onclick="actualizar()">Save</button>
+                <button class="btn btn-primary" type="submit">Save</button>
             </form>
         </div>
     </div>  
@@ -77,16 +77,16 @@
         </div>
         `)
 
-        ioSocket.on("productList",(data)=>{
+        ioSocket.on("productList", (data)=>{
             //console.log(data);
             const lista = listProduct({data});
-            //console.log(lista);
+           // console.log(lista);
             const div = document.getElementById("List");
             div.innerHTML = lista;
         });
 
         function actualizar(){
-            ioSocket.emit("refresh",{});
+            ioSocket.emit("refresh", {});
         }
     </script>
 </body>
