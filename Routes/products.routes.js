@@ -1,18 +1,30 @@
 const express = require("express");
 const {product} = require("../Class/products.class.js");
 const products = express.Router();
-const { ioServer} = require("../Server/Server");
-
-const url = __dirname.replace("\\Routes","");
 
 
-products.get("/products",(req,res)=>{ 
-    res.sendFile(url+"/public/index.html");
+products.get("/list/:id?",(req,res)=>{ 
+    let data;
+    const id = req.params.id;
+    if (typeof id === 'number') {        
+        data = product.getProduct(id);
+    }else{
+        data = product.getProduct();
+    }
+    return data;
 });
 
-products.get("/products/list/:id", (req,res)=>{
-    const id = req.params.id;
-    const response = product.getProduct(id);
+products.post("/add", (req,res)=>{
+    const data = {
+        timestamp: Date.now(),
+        name: req.body.name,
+        description: req.body.description,
+        code: req.body.code,
+        picture: req.body.picture,
+        price:req.body.price,
+        stock:req.body.stock,
+    }
+    const response = product.saveProduct(data);
     if (response.length == 0) {        
         res.status(400).json({error:"Producto no encontrado"});
     } else {
@@ -20,20 +32,26 @@ products.get("/products/list/:id", (req,res)=>{
     }   
 });
 
-products.post("/products/save",(req,res)=>{ 
+products.put("/update/:id", (req,res)=>{
     const data = {
-        title: req.body.title,
-        price: req.body.price,
-        thumbnail: req.body.thumbnail
+        id: req.params.id,
+        timestamp: Date.now(),
+        name: req.body.name,
+        description: req.body.description,
+        code: req.body.code,
+        picture: req.body.picture,
+        price:req.body.price,
+        stock:req.body.stock,
     }
-    const response = product.saveProduct(data);
-    let products = product.getProducts();
-    ioServer.sockets.emit("productList", products);
-        
-    res.redirect('/api/products');
-});
+    const response = product.updateProduct(data);
+    if (response.length == 0) {        
+        res.status(400).json({error:"Producto no encontrado"});
+    } else {
+        res.status(200).json(response);
+    }   
+})
 
-products.delete("/product/delete/:id", (req, res)=>{
+products.delete("/delete/:id", (req, res)=>{
     const id = req.params.id;
     const response = product.deleteProduct(id);
     if (response.length == 0) {        
@@ -43,17 +61,5 @@ products.delete("/product/delete/:id", (req, res)=>{
     }   
 });
 
-products.put("/product/update/:id", (req,res)=>{
-    const d= {
-        data: {
-            title: req.body.title,
-            price: req.body.price,
-            thumbnail: req.body.thumbnail
-        },
-        id: req.params.id
-    }
-    const response = product.updateProduct(d);
-    res.status(200).json(response);
-});
 
 module.exports = products;

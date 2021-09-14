@@ -3,16 +3,16 @@ class Product {
         this.products = []
     }
 
-    getProducts(){
+    getProduct(id=false){
+       if (!id) {
         return this.products;
-    }
-
-   getProduct(id){        
-        const product = this.products.find(p=>p.id==id);
-        if (product == undefined) {
-            return [];
-        }
-        return product;
+       } else {
+           const product = this.products.find(p=>p.id==id);
+            if (product == undefined) {
+                return [];
+            }
+            return product;
+       }         
     }
 
     saveProduct(data){
@@ -35,10 +35,8 @@ class Product {
         return deleted;
     }
 
-    updateProduct(dat){
-        const data = dat.data;
-        const id = Number(dat.id);
-        data.id = id;
+    updateProduct(data){
+        const id = data.id;
         const d = this.products
         .map(product => {
             if(product.id == id){
