@@ -4,14 +4,15 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "ServerES6toJS5":"./node_modules/.bin/babel ./server.es6.js -o ./server.js",
-    "ServerTStoJS5":"./node_modules/.bin/tsc",
+    "ServerES6toJS5": "./node_modules/.bin/babel ./server.es6.js -o ./server.js",
+    "ServerTStoJS5": "./node_modules/.bin/tsc",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
   "author": "<Luis Mendez : Lamda94@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.3",
     "moment": "^2.29.1",

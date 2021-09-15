@@ -1,5 +1,7 @@
 const handlebars = require("express-handlebars");
 const products = require("./Routes/products.routes.js");
+const carts = require('./Routes/cart.routes.js');
+const {notFound} = require("./middleware/routeNotFound.js");
 
 const { ioServer, app, server} = require("./Server/Server");
 
@@ -18,7 +20,9 @@ app.engine(
 app.set("view engine", ENGINE_NAME);
 app.set("views", "./views");
 
-app.use("/api", products);
+app.use("/products", products);
+app.use("/carts", carts);
+app.use(notFound);
 
 const PORT = 8080;
 server.listen(PORT, ()=>console.log(`App start on http://localhost:8080`));

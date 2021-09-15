@@ -6,10 +6,11 @@ const moment = require("moment");
 const { chatMenssage } = require("../Script/chat");
 const {product} = require("../Class/products.class.js");
 
+const url = __dirname.replace("Server", "\public");
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(url));
 
 ioServer.on("connection", async (socket) => {
     let products = product.getProducts();

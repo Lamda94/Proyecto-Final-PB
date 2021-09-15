@@ -11,7 +11,12 @@ products.get("/list/:id?",(req,res)=>{
     }else{
         data = product.getProduct();
     }
-    return data;
+
+    if (data.length == 0) {        
+        res.status(400).json({error:"Producto no encontrado"});
+    } else {
+        res.status(200).json(data);
+    }   
 });
 
 products.post("/add", (req,res)=>{

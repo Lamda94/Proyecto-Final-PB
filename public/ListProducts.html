@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <title>Product List</title>
+</head>
+<body class="bg-dark">
+    <div class="container-fluid " style="padding: 0;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Api Products</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="ListProducts.html">List</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="NewProduct.html">New</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </nav>
+        <h1 class="text-center text-light mt-4">Product List</h1>
+        <div class="d-flex justify-content-center">  
+            <div id="list">
+            </div>
+        </div>
+        
+    </div>
+</body>
+<script>
+    const url = "http://localhost:8080/products/list";
+    fetch(url, {
+        method: 'GET', 
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(data => {
+        const listProduct = Handlebars.compile(`
+            {{#if data.length}}
+                {{#each data}}
+                    <div class="card m-5" style="width: 18rem;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/hg-store-293e9.appspot.com/o/product.png?alt=media&token=5ef8328d-6062-4d30-956b-9a780e83c0a8" class="card-img-top ms-4 mt-2" alt="" style="width: 80%;">
+                        <div class="card-body">                        
+                            <h5 class="card-title">Name: {{name}}</h5>
+                            <h5 class="card-title">Timestamp: {{timestamp}}</h5>
+                            <p class="card-text fw-bold">Description: {{description}}</p>
+                            <h5 class="card-title">Code: {{code}}</h5>
+                            <h5 class="card-title">Price: {{price}} Cop</h5>
+                            <h5 class="card-title mb-4">Stock: {{stock}} Unidades</h5>
+                            <a href="http://localhost:8080/UpdateProduct.html?id={{id}}" class="btn btn-primary">Edit</a>
+                            <a class="btn btn-danger ms-3" onclick="deleteProduct({{id}})">Delete</a>
+                        </div>
+                    </div>
+                {{/each}}
+            {{else}}
+                <div class="alert alert-warning m-5" role="alert">Products not found.</div>
+            {{/if}}
+        `);
+        const lista = listProduct({data});
+        const div = document.getElementById("list");
+        div.innerHTML = lista;
+    });
+    const deleteProduct = (id)=>{
+            const url = "http://localhost:8080/products/delete/"+id;
+            fetch(url, {
+                method: 'DELETE', 
+                headers:{ 'Content-Type': 'application/json'  }
+            })
+            .then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                window.location.href = "http://localhost:8080/ListProducts.html"
+            });
+        }
+</script>
+</html>
