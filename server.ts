@@ -26,6 +26,7 @@ app.set("views", "./views");
 
 app.use("/products", products);
 app.use("/carts", carts);
+
 app.use(notFound);
 
 const PORT:number = 8080;

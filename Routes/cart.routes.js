@@ -4,25 +4,23 @@ const {product} = require("../Class/products.class.js");
 const carts = express.Router();
 
 
-carts.get("/list/:id?",(req,res)=>{ 
+carts.get("/list/:id?", async (req,res)=>{ 
     let data;
     const id = req.params.id;
     if (typeof id === 'undefined') {      
-        data = cart.getCart();
+        data = await cart.getCart();
     }else{
-        data = cart.getCart(id);
+        data = await cart.getCart(id);
     }
-    if (data.length == 0) {        
-        res.status(400).json({error:"Producto no encontrado"});
-    } else {
-        res.status(200).json(data);
-    } 
+    res.status(200).json(data);   
 });
 
-carts.get("/add/:id", (req,res)=>{
+carts.get("/add/:id", async (req,res)=>{
     const id = req.params.id;
-    const p = product.getProduct(id);
-    const response = cart.addCart(p);
+    const p = await product.getProduct(id);
+    console.log(p);
+    const response = await cart.addCart(p);
+    console.log(response);
     if (response.length == 0) {        
         res.status(400).json({error:"Producto no encontrado"});
     } else {
@@ -32,14 +30,10 @@ carts.get("/add/:id", (req,res)=>{
 
 
 
-carts.delete("/delete/:id", (req, res)=>{
+carts.delete("/delete/:id", async (req, res)=>{
     const id = req.params.id;
-    const response = product.deleteProduct(id);
-    if (response.length == 0) {        
-        res.status(400).json({error:"Producto no encontrado"});
-    } else {
-        res.status(200).json(response);
-    }   
+    const response = await cart.deleteCart(id);
+    res.status(200).json(response);
 });
 
 

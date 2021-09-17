@@ -27,7 +27,7 @@
                   </li>
                 </ul>
             </div>
-            <div className="d-flex" style="cursor: pointer;">
+            <div className="float-end" style="cursor: pointer;">
                 <a href="http://localhost:8080/cart.html">
                     <span class="navbar-text">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
@@ -38,7 +38,7 @@
             </div>
            </div>
         </nav>
-        <h1 class="text-center text-light mt-4">Product List</h1>
+        <h1 class="text-center text-light mt-4">List Cart</h1>
         <div class="d-flex justify-content-center">  
             <div id="list">
             </div>
@@ -47,7 +47,7 @@
     </div>
 </body>
 <script>
-    const url = "http://localhost:8080/products/list";
+    const url = "http://localhost:8080/carts/list";
     fetch(url, {
         method: 'GET', 
         headers:{
@@ -55,7 +55,8 @@
         }
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
-    .then(data => {
+    .then(response => {
+        console.log(response);
         const listProduct = Handlebars.compile(`
             {{#if data.length}}
                 {{#each data}}
@@ -68,10 +69,7 @@
                             <h5 class="card-title">Code: {{code}}</h5>
                             <h5 class="card-title">Price: {{price}} Cop</h5>
                             <h5 class="card-title mb-4">Stock: {{stock}} Unidades</h5>
-                            <a href="http://localhost:8080/UpdateProduct.html?id={{id}}" class="btn btn-primary">Edit</a>
                             <a class="btn btn-danger ms-3" onclick="deleteProduct({{id}})">Delete</a>
-                            <br>
-                            <a class="btn btn-success mt-3" onclick="addToCart({{id}})">Add to Cart</a>
                         </div>
                     </div>
                 {{/each}}
@@ -79,31 +77,27 @@
                 <div class="alert alert-warning m-5" role="alert">Products not found.</div>
             {{/if}}
         `);
+        let data = [];
+        response
+        .map((cart) => {
+            data = [...data, cart.product];
+        });         
         const lista = listProduct({data});
         const div = document.getElementById("list");
         div.innerHTML = lista;
+        console.log(data);
     });
     const deleteProduct = (id)=>{
-            const url = "http://localhost:8080/products/delete/"+id;
-            fetch(url, {
-                method: 'DELETE', 
-                headers:{ 'Content-Type': 'application/json'  }
-            })
-            .then(res => res.json())
-            .catch(error => console.error('Error:', error))
-            .then(response => {
-                window.location.href = "http://localhost:8080/ListProducts.html"
-            });
-        }
-    const addToCart = (id)=>{
-        const url = "http://localhost:8080/carts/add/"+id;
+        const url = "http://localhost:8080/carts/delete/"+id;
         fetch(url, {
-                method: 'GET', 
-                headers:{ 'Content-Type': 'application/json'  }
-            })
-            .then(res => res.json())
-            .catch(error => console.error('Error:', error))
-            .then(response => console.log(response));
+            method: 'DELETE', 
+            headers:{ 'Content-Type': 'application/json'  }
+        })
+        .then(res => res.json())
+        .catch(error => console.error('Error:', error))
+        .then(response => {
+            location.reload();
+        });
     }
 </script>
 </html>

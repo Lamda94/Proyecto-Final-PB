@@ -1,0 +1,1 @@
+[{"cart":[{"timestamp":1631849370108,"product":{"timestamp":1631846249691,"name":"producto 1","description":"descripcion del producto 1","code":123,"picture":"url","price":456,"stock":40,"id":1},"id":1}],"products":[{"id":"1","timestamp":1631849578446,"name":"producto 1","description":"descripcion del producto 1","code":"1230","picture":"url","price":"456","stock":"40"}]}]
