@@ -1,28 +1,69 @@
-const {promises} = require('fs');
-const { updateDecorator } = require('typescript');
-const {readFile,writeFile} = promises;
-const url = __dirname.replace("\\Class","\\data\\products.json");
+const {options} = require("../options/MariaDB.js");
+const knex = require("knex")(options);
 
 class Product {
-    constructor(name){
-        this.fileName=name;
-        this.products = [];
+    constructor(){
+        knex.schema.hasTable("products")
+        .then(d=>{
+            if (!d) {
+                knex.schema
+                .createTable("products", (table) => {
+                    table.increments("id", { primaryKey: true }).notNullable();
+                    table.string("name").notNullable();
+                    table.string("description").notNullable();
+                    table.timestamp("timestamp").defaultTo(knex.fn.now());
+                    table.integer("code").notNullable();
+                    table.string("picture").notNullable();
+                    table.float("price").notNullable();
+                    table.integer("stock").notNullable();
+                })
+                .then(() => console.log("table created"))
+                .catch((error) => {
+                    console.log(error);
+                    return {manssage:"Error al crear la base de datos.", err:error}
+                })
+                .finally(() => {
+                    knex.destroy();
+                });
+            }
+        })
+        .catch(err=>console.log(err))
     }
 
     async getProduct(id=false){
         try {
-            const data =  await readFile(this.fileName); 
-            const p = JSON.parse(data);
-            this.products = p[0].products;
-            if (!id) {
-                return this.products;
-            } else {
-                const product = this.products.find(p=>p.id==id);
-                if (product == undefined) {
-                    return [];
-                }
-                return product;
-            }     
+            this.products=[];
+            if (id) {
+                const data = []
+                const response = await knex.from("products").select("*").where("id", "=", id);
+                for (const row of response) {
+                    data.push({
+                        id: row["id"],
+                        timestamp: row["timestamp"],
+                        name: row["name"],
+                        description: row["description"],
+                        code: row["code"],
+                        picture: row["picture"],
+                        price: row["price"],
+                        stock: row["stock"],
+                    });
+               }
+               return data;
+            }
+           const response = await knex.from("products").select("*");
+           for (const row of response) {
+                this.products.push({
+                    id: row["id"],
+                    timestamp: row["timestamp"],
+                    name: row["name"],
+                    description: row["description"],
+                    code: row["code"],
+                    picture: row["picture"],
+                    price: row["price"],
+                    stock: row["stock"],
+                });
+           }
+           return this.products;
         } catch (error) {
             return []
         }    
@@ -30,14 +71,8 @@ class Product {
 
     async saveProduct(data){
         try {
-            this.products = await this.getProduct();
-            let id = 1
-            if (this.products.length > 0) {
-                id = Number(this.products[this.products.length-1].id)+1;  
-            }           
-            data.id=id;    
-            this.products.push(data);  
-            await this.write(this.products);
+            console.log(data);
+            await knex("products").insert(data);            
         } catch (err) {
             console.log(`Error: ${err.message}`);
         }    
@@ -45,16 +80,17 @@ class Product {
     }
 
     async deleteProduct(id){
+        console.log(id);
         try {
-            this.products = await this.getProduct();
-            const deleted = await this.getProduct(id);
-            if (deleted.length == 0) {
+            const response = await this.getProduct();
+            const productDelete = response.find(d=>d.id==id);
+            if (productDelete == undefined) {
                 return [];
             }
-            const productsUpdated = this.products.filter(p=>p.id!=id); 
-            this.products = productsUpdated;
-            await this.write(this.products);
-            return deleted;
+            await knex.from("products")
+            .where("id", "=", id)
+            .del()
+            return productDelete;
         } catch (err) {
             console.log(`Error: ${err.message}`);
         }    
@@ -62,40 +98,21 @@ class Product {
 
     async updateProduct(data){        
         try {
-            this.products = await this.getProduct();
-            const id = data.id;
-            const updated = await this.getProduct(id);
-            if (updated == undefined) {
+            const response = await this.getProduct();
+            const productDelete = response.find(d=>d.id == data.id);
+            if (productDelete == undefined) {
                 return [];
-            } 
-            const d = this.products
-            .map(product => {
-                if(product.id == id){
-                    return data;
-                }else{
-                    return product;
-                }
-            });            
-            this.products = d;        
-            await this.write(this.products);
-            return data;    
+            }
+            await knex("products")
+            .where('id', '=', data.id)
+            .update(data)  
+            return await this.getProduct(data.id);
         } catch (err) {
             console.log(`Error: ${err.message}`);
         }            
     }
-
-    async write(d){
-        try {
-            const data =  await readFile(this.fileName); 
-            let p = JSON.parse(data);
-            p[0].products = d;
-            await writeFile(this.fileName, JSON.stringify(p));
-        } catch (error) {
-            
-        }
-    }
 }
 
-const product = new Product(url);
+const product = new Product();
 
 module.exports = {product};

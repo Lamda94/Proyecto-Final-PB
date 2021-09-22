@@ -17,7 +17,6 @@ products.get("/list/:id?",async (req,res)=>{
 
 products.post("/add", async (req,res)=>{
     const data = {
-        timestamp: Date.now(),
         name: req.body.name,
         description: req.body.description,
         code: Number(req.body.code),
@@ -35,8 +34,7 @@ products.post("/add", async (req,res)=>{
 
 products.put("/update/:id", async (req,res)=>{
     const data = {
-        id: Number(req.params.id),
-        timestamp: Date.now(),
+        id: Number(req.params.id),        
         name: req.body.name,
         description: req.body.description,
         code: Number(req.body.code),

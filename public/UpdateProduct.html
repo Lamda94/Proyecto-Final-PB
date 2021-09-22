@@ -104,7 +104,8 @@
         })
         .then(res => res.json())
         .catch(error => console.error('Error:', error))
-        .then(data => {
+        .then(d => {
+            const data = d[0];
             document.getElementById("id").value = data.id;
             document.getElementById("name").value = data.name;
             document.getElementById("description").value = data.description;
