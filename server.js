@@ -25,6 +25,10 @@ app.set("view engine", ENGINE_NAME);
 app.set("views", "./views");
 app.use("/products", products);
 app.use("/carts", carts);
+app.get("/", function (req, res) {
+  var url = __dirname + "\\public\\ListProducts.html";
+  res.sendFile(url);
+});
 app.use(notFound);
 var PORT = 8080;
 server.listen(PORT, function () {

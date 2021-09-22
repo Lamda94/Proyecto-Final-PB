@@ -22,6 +22,10 @@ app.set("views", "./views");
 
 app.use("/products", products);
 app.use("/carts", carts);
+app.get("/", (req, res)=>{
+   const url = __dirname+"\\public\\ListProducts.html";
+    res.sendFile(url);
+})
 app.use(notFound);
 
 const PORT = 8080;

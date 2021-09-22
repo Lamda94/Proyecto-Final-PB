@@ -30,34 +30,38 @@ class Cart {
     async addCart(data){   
         try {
             this.cart = await this.getCart();
-            let id = 1
-            const d = {
-                timestamp: Date.now(),
-                product: data,
-            }
-            if (this.cart.length > 0) {
-                id = this.cart[this.cart.length-1].id+1;  
-            }
-            d.id = id;
-            console.log(d);
-            this.cart.push(d);
-            console.log(this.cart);
-            
+            if (this.cart.length == 0) {
+                let id = 1
+                const d = {
+                    timestamp: Date.now(),
+                    product: [data],
+                }
+                if (this.cart.length > 0) {
+                    id = Number(this.cart[this.cart.length-1].id)+1;  
+                }
+                d.id = id;
+                console.log("d: "+d);
+                this.cart.push(d);
+                console.log("cart: "+this.cart);
+            } else {
+                console.log(this.cart);
+                this.cart.product.push(data);
+            }           
             await this.write(this.cart);
             return d;
         } catch (error) {
-            console.log(error.message);
+            console.log("Error: "+error.message);
         } 
     }
 
     async deleteCart(id){
         try {
-            const deleted = this.getCart(id);
+            const deleted = this.getCart();
             if (deleted.length == 0) {
                 return [];
             }
-            const cartUpdated = this.cart.filter(p=>p.id!=id); 
-            this.cart = cartUpdated;
+            const productUpdated = this.cart.product.filter(p=>p.id!=id); 
+            this.cart.product = productUpdated;
             await this.write(this.cart);
             return deleted;
         } catch (error) {

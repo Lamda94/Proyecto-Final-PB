@@ -77,11 +77,7 @@
                 <div class="alert alert-warning m-5" role="alert">Products not found.</div>
             {{/if}}
         `);
-        let data = [];
-        response
-        .map((cart) => {
-            data = [...data, cart.product];
-        });         
+        let data = response.product;     
         const lista = listProduct({data});
         const div = document.getElementById("list");
         div.innerHTML = lista;

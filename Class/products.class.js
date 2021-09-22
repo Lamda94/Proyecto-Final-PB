@@ -1,4 +1,5 @@
 const {promises} = require('fs');
+const { updateDecorator } = require('typescript');
 const {readFile,writeFile} = promises;
 const url = __dirname.replace("\\Class","\\data\\products.json");
 
@@ -32,7 +33,7 @@ class Product {
             this.products = await this.getProduct();
             let id = 1
             if (this.products.length > 0) {
-                id = this.products[this.products.length-1].id+1;  
+                id = Number(this.products[this.products.length-1].id)+1;  
             }           
             data.id=id;    
             this.products.push(data);  
@@ -63,6 +64,10 @@ class Product {
         try {
             this.products = await this.getProduct();
             const id = data.id;
+            const updated = await this.getProduct(id);
+            if (updated == undefined) {
+                return [];
+            } 
             const d = this.products
             .map(product => {
                 if(product.id == id){
@@ -70,10 +75,10 @@ class Product {
                 }else{
                     return product;
                 }
-            });
+            });            
             this.products = d;        
             await this.write(this.products);
-            return this.products.find(p=>p.id == id);  
+            return data;    
         } catch (err) {
             console.log(`Error: ${err.message}`);
         }            

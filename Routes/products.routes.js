@@ -20,10 +20,10 @@ products.post("/add", async (req,res)=>{
         timestamp: Date.now(),
         name: req.body.name,
         description: req.body.description,
-        code: req.body.code,
+        code: Number(req.body.code),
         picture: req.body.picture,
-        price:req.body.price,
-        stock:req.body.stock,
+        price:Number(req.body.price),
+        stock:Number(req.body.stock),
     }
     const response = await product.saveProduct(data);
     if (response.length == 0) {        
@@ -35,14 +35,14 @@ products.post("/add", async (req,res)=>{
 
 products.put("/update/:id", async (req,res)=>{
     const data = {
-        id: req.params.id,
+        id: Number(req.params.id),
         timestamp: Date.now(),
         name: req.body.name,
         description: req.body.description,
-        code: req.body.code,
+        code: Number(req.body.code),
         picture: req.body.picture,
-        price:req.body.price,
-        stock:req.body.stock,
+        price: Number(req.body.price),
+        stock: Number(req.body.stock),
     }
     const response = await product.updateProduct(data);
     if (response.length == 0) {        

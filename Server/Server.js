@@ -13,7 +13,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(url));
 
 ioServer.on("connection", async (socket) => {
-    let products = product.getProducts();
+    let products = product.getProduct();
     let menssage = await chatMenssage.getMenssage();
     socket.emit("productList", products);
     socket.emit("chat", menssage);
