@@ -68,10 +68,10 @@
                             <h5 class="card-title">Code: {{code}}</h5>
                             <h5 class="card-title">Price: {{price}} Cop</h5>
                             <h5 class="card-title mb-4">Stock: {{stock}} Unidades</h5>
-                            <a href="http://localhost:8080/UpdateProduct.html?id={{id}}" class="btn btn-primary">Edit</a>
-                            <a class="btn btn-danger ms-3" onclick="deleteProduct({{id}})">Delete</a>
+                            <a href="http://localhost:8080/UpdateProduct.html?id={{_id}}" class="btn btn-primary">Edit</a>
+                            <a class="btn btn-danger ms-3" onclick="deleteProduct({{_id}})">Delete</a>
                             <br>
-                            <a class="btn btn-success mt-3" onclick="addToCart({{id}})">Add to Cart</a>
+                            <a class="btn btn-success mt-3" onclick="addToCart({{_id}})">Add to Cart</a>
                         </div>
                     </div>
                 {{/each}}

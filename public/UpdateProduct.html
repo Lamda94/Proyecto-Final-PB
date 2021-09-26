@@ -105,8 +105,8 @@
         .then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(d => {
-            const data = d[0];
-            document.getElementById("id").value = data.id;
+            const data = d;
+            document.getElementById("id").value = data._id;
             document.getElementById("name").value = data.name;
             document.getElementById("description").value = data.description;
             document.getElementById("code").value = data.code;
@@ -118,23 +118,26 @@
         const updateProduct = ()=>{
             const url = "http://localhost:8080/products/update/"+id[1];
             const data = {
+                data: {
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    code: document.getElementById("code").value,
+                    picture: document.getElementById("picture").value,
+                    price: document.getElementById("price").value,
+                    stock: document.getElementById("stock").value,
+                },
                 id: document.getElementById("id").value,
-                name: document.getElementById("name").value,
-                description: document.getElementById("description").value,
-                code: document.getElementById("code").value,
-                picture: document.getElementById("picture").value,
-                price: document.getElementById("price").value,
-                stock: document.getElementById("stock").value,
             }
             fetch(url, {
                 method: 'PUT', 
                 body: JSON.stringify(data), 
                 headers:{ 'Content-Type': 'application/json'  }
             })
-            .then(res => res.json())
+            .then(res =>  res.json())
             .catch(error => console.error('Error:', error))
             .then(response => {
-                window.location.href = "http://localhost:8080/ListProducts.html"
+                console.log(response);
+                //window.location.href = "http://localhost:8080/ListProducts.html"
             });
         }
     </script>
