@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const {productModel} = require("../models/products.model.js");
-
+require('dotenv').config();
 class Product {
     constructor(){
+        this.MDBURI=process.env.MONGO_URI;
     }
 
     async getProduct(id=false){
         try {
-            await mongoose.connect("mongodb://localhost:27017/ecommerce");
+            await mongoose.connect(this.MDBURI);
             if (!id) {
                 const data = await productModel.find();
                 return data;
@@ -24,7 +25,7 @@ class Product {
 
     async saveProduct(data){
         try {
-            await mongoose.connect("mongodb://localhost:27017/ecommerce");
+            await mongoose.connect(this.MDBURI);
             const newProduct = new productModel(data);
             const saved = await newProduct.save();
             return saved;
@@ -37,7 +38,7 @@ class Product {
 
     async deleteProduct(id){
         try {
-            await mongoose.connect("mongodb://localhost:27017/ecommerce"); 
+            await mongoose.connect(this.MDBURI); 
             const deleted = await productModel.deleteOne({_id: id});
             return deleted;
         } catch (err) {
@@ -49,7 +50,7 @@ class Product {
 
     async updateProduct(data, id){        
         try {
-            await mongoose.connect("mongodb://localhost:27017/ecommerce");
+            await mongoose.connect(this.MDBURI);
             const updated = await productModel.updateMany({_id:id}, data);
             return updated;
         } catch (err) {
