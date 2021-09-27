@@ -29,6 +29,10 @@ app.get("/", function (req, res) {
   var url = __dirname + "\\public\\ListProducts.html";
   res.sendFile(url);
 });
+app.get("/chat", function (req, res) {
+  var url = __dirname + "\\public\\chat.html";
+  res.sendFile(url);
+});
 app.use(notFound);
 var PORT = 8080;
 server.listen(PORT, function () {

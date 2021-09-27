@@ -16,7 +16,7 @@ class Cart {
             if (!id) {
                 return this.cart;
             } else {
-                const carts = this.cart.find(p=>p.id==id);
+                const carts = this.cart[0].product.find(p=>p._id==id);
                 if (carts == undefined) {
                     return [];
                 }
@@ -40,15 +40,15 @@ class Cart {
                     id = Number(this.cart[this.cart.length-1].id)+1;  
                 }
                 d.id = id;
-                console.log("d: "+d);
+                //console.log("d: "+d);
                 this.cart.push(d);
-                console.log("cart: "+this.cart);
+                //console.log("cart: "+this.cart);
             } else {
-                console.log(this.cart);
-                this.cart.product.push(data);
+                //console.log(this.cart[0].product);
+                this.cart[0].product.push(data);
             }           
             await this.write(this.cart);
-            return d;
+            return data;
         } catch (error) {
             console.log("Error: "+error.message);
         } 
@@ -56,12 +56,12 @@ class Cart {
 
     async deleteCart(id){
         try {
-            const deleted = this.getCart();
+            const deleted = await this.getCart(id);
             if (deleted.length == 0) {
                 return [];
             }
-            const productUpdated = this.cart.product.filter(p=>p.id!=id); 
-            this.cart.product = productUpdated;
+            const productUpdated = this.cart[0].product.filter(p=>p._id!=id); 
+            this.cart[0].product = productUpdated;
             await this.write(this.cart);
             return deleted;
         } catch (error) {

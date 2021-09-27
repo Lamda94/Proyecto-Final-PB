@@ -26,6 +26,10 @@ app.get("/", (req, res)=>{
    const url = __dirname+"\\public\\ListProducts.html";
     res.sendFile(url);
 })
+app.get("/chat", (req, res)=>{
+  const url = __dirname+"\\public\\chat.html";
+   res.sendFile(url);
+})
 app.use(notFound);
 
 const PORT = 8080;

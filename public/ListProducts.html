@@ -69,9 +69,9 @@
                             <h5 class="card-title">Price: {{price}} Cop</h5>
                             <h5 class="card-title mb-4">Stock: {{stock}} Unidades</h5>
                             <a href="http://localhost:8080/UpdateProduct.html?id={{_id}}" class="btn btn-primary">Edit</a>
-                            <a class="btn btn-danger ms-3" onclick="deleteProduct({{_id}})">Delete</a>
+                            <a class="btn btn-danger ms-3" onclick="deleteProduct('{{_id}}')">Delete</a>
                             <br>
-                            <a class="btn btn-success mt-3" onclick="addToCart({{_id}})">Add to Cart</a>
+                            <a class="btn btn-success mt-3" onclick="addToCart('{{_id}}')">Add to Cart</a>
                         </div>
                     </div>
                 {{/each}}
@@ -85,6 +85,7 @@
     });
     const deleteProduct = (id)=>{
             const url = "http://localhost:8080/products/delete/"+id;
+            console.log(url);
             fetch(url, {
                 method: 'DELETE', 
                 headers:{ 'Content-Type': 'application/json'  }
@@ -92,7 +93,7 @@
             .then(res => res.json())
             .catch(error => console.error('Error:', error))
             .then(response => {
-                window.location.href = "http://localhost:8080/ListProducts.html"
+                window.location.href = "http://localhost:8080/ListProducts.html";
             });
         }
     const addToCart = (id)=>{

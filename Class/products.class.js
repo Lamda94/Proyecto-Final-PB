@@ -50,8 +50,7 @@ class Product {
     async updateProduct(data, id){        
         try {
             await mongoose.connect("mongodb://localhost:27017/ecommerce");
-            console.log(data, id);
-            const updated = productModel.updateMany({_id:id}, data);
+            const updated = await productModel.updateMany({_id:id}, data);
             return updated;
         } catch (err) {
             console.log(`Error: ${err.message}`);

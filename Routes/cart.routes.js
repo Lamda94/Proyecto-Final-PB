@@ -16,12 +16,13 @@ carts.get("/list/:id?", async (req,res)=>{
 });
 
 carts.get("/add/:id", async (req,res)=>{
-    const id = Number(req.params.id);
+    const id = req.params.id;
+    //console.log(id);
     const p = await product.getProduct(id);
     if (p.length == 0) {
         res.status(400).json({error:"Producto no encontrado"});
     }else{
-        console.log(p);
+        //console.log(p);
         const response = await cart.addCart(p);
         res.status(200).json(response);    
     }   
@@ -30,7 +31,7 @@ carts.get("/add/:id", async (req,res)=>{
 
 
 carts.delete("/delete/:id", async (req, res)=>{
-    const id = Number(req.params.id);
+    const id = req.params.id;
     const response = await cart.deleteCart(id);
     res.status(200).json(response);
 });
