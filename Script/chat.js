@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const {menssageModel} = require("../models/menssage.model.js");
+require('dotenv').config();
 
 class File{ 
-    constructor(){}
+    constructor(){
+        this.MDBURI=process.env.MONGO_URI;
+        console.log(this.MDBURI);
+    }
 
     async getMenssage(){
         try {
-            await mongoose.connect("mongodb://localhost:27017/ecommerce");
+            await mongoose.connect(this.MDBURI);
             const data = await menssageModel.find();            
             return data;
         } catch (err) {
@@ -18,16 +22,14 @@ class File{
 
     async addMenssage(data){    
         try {
-            await mongoose.connect("mongodb://localhost:27017/ecommerce");
+            await mongoose.connect(this.MDBURI);
 
             const dataMensage = {
                 email:data.email, 
                 menssage:data.menssage,
             };
             
-            const newMenssage = new menssageModel(dataMensage);
-
-            const menssage = await newMenssage.save();
+            const menssage = menssageModel.insertMany(dataMensage);
 
             return menssage;
         } catch (err) {

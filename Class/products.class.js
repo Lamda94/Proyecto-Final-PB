@@ -26,8 +26,7 @@ class Product {
     async saveProduct(data){
         try {
             await mongoose.connect(this.MDBURI);
-            const newProduct = new productModel(data);
-            const saved = await newProduct.save();
+            const saved = await productModel.insertMany(data);
             return saved;
         } catch (err) {
             console.log(`Error: ${err.message}`);
