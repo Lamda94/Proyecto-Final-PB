@@ -1,6 +1,9 @@
+require("dotenv").config();
+const persis = parseInt(process.env.PERSISTENCIA);
 const express = require("express");
 const {cart} = require("../Class/cart.class.js");
-const {product} = require("../Class/products.class.js");
+const productClass = require("../Class/products.js");
+const {product} = productClass.init(persis);
 const carts = express.Router();
 
 
@@ -17,12 +20,10 @@ carts.get("/list/:id?", async (req,res)=>{
 
 carts.get("/add/:id", async (req,res)=>{
     const id = req.params.id;
-    //console.log(id);
     const p = await product.getProduct(id);
     if (p.length == 0) {
         res.status(400).json({error:"Producto no encontrado"});
     }else{
-        //console.log(p);
         const response = await cart.addCart(p);
         res.status(200).json(response);    
     }   

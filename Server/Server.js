@@ -1,10 +1,13 @@
+require("dotenv").config();
+const persis = parseInt(process.env.PERSISTENCIA);
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const ioServer = require("socket.io")(server);
 const moment = require("moment");
 const { chatMenssage } = require("../Script/chat");
-const {product} = require("../Class/products.class.js");
+const productClass = require("../Class/products.js");
+const {product} = productClass.init(persis);
 
 const url = __dirname.replace("Server", "\public");
 

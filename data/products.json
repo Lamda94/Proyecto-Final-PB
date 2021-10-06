@@ -1,1 +1,1 @@
-[{"cart":[{"timestamp":1632766946243,"product":[{"_id":"614d1f6835f3f9ce0fd1b210","name":"Producto 1","description":"Description producto 1","code":1,"picture":"url","price":184,"stock":100,"timestamp":"2021-09-27T18:22:26.196Z"},{"_id":"614d1f6835f3f9ce0fd1b212","name":"Producto 3","description":"Description producto 3","code":3,"picture":"url","price":2604,"stock":100,"timestamp":"2021-09-27T18:31:29.580Z"}],"id":1}]}]
+[{"cart":[],"products":[{"name":"producto 1","description":"descripcion del producto 1","code":123,"picture":"url","price":456,"stock":40,"id":1}]}]

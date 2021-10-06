@@ -5,7 +5,6 @@ require('dotenv').config();
 class File{ 
     constructor(){
         this.MDBURI=process.env.MONGO_URI;
-        console.log(this.MDBURI);
     }
 
     async getMenssage(){

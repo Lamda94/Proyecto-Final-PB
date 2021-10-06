@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {productModel} = require("../models/products.model.js");
+const {productModel} = require("../../models/products.model.js");
 require('dotenv').config();
 class Product {
     constructor(){
@@ -10,10 +10,31 @@ class Product {
         try {
             await mongoose.connect(this.MDBURI);
             if (!id) {
-                const data = await productModel.find();
+                const data = [];
+                const d = await productModel.find();
+                for (const product of d) {
+                    data.push({
+                        id: product._id,        
+                        name:product.name,
+                        description:product.description,
+                        code: Number(product.code),
+                        picture:product.picture,
+                        price: Number(product.price),
+                        stock: Number(product.stock),
+                    });
+                }
                 return data;
             }else{
-                const data = await productModel.findById(id);
+                const d = await productModel.findById(id);
+                const data ={
+                        id: d._id,        
+                        name:d.name,
+                        description:d.description,
+                        code: Number(d.code),
+                        picture:d.picture,
+                        price: Number(d.price),
+                        stock: Number(d.stock),
+                    };
                 return data;
            }
         } catch (error) {
