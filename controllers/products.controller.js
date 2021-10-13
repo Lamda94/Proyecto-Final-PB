@@ -112,3 +112,14 @@ exports.productDelete =  async (req, res)=>{
         res.status(200).json(response);
     }   
 }
+
+exports.productFilter = async (req, res)=>{
+    const filter = {...req.body};
+    console.log(req.body);
+    const response = await product.filter(filter);
+    if (response.length == 0) {        
+        res.status(400).json({error:"Producto no encontrado"});
+    } else {
+        res.status(200).json(response);
+    }   
+}

@@ -6,6 +6,8 @@ products.get("/list/:id?", productController.productList);
 
 products.post("/add", productController.productAdd);
 
+products.post("/filter", productController.productFilter);
+
 products.put("/update/:id", productController.productUpdate)
 
 products.delete("/delete/:id", productController.productDelete);

@@ -79,6 +79,35 @@ class Product {
             await mongoose.disconnect();
         }           
     }
+
+    async filter(filter={}){
+        const data = await this.getProduct();
+        if (data.length == 0) {
+            return [];
+        }
+
+        if ("name" in filter) {
+            const dataFilter = data.filter(d=>d.name === filter.name);  
+            return dataFilter;
+        }
+
+        if ("code" in filter) {
+            const dataFilter = data.filter(d=>d.code == filter.code)
+            return dataFilter;
+        }
+
+        if ("price" in filter) {
+            const dataFilter = data.filter(d=>d.price > parseInt(filter.price.from) && d.price < parseInt(filter.price.to))
+            return dataFilter;
+        }
+        
+        if ("stock" in filter) {
+            const dataFilter = data.filter(d=>d.stock > parseInt(filter.stock.from) && d.stock < parseInt(filter.stock.to))
+            return dataFilter;
+        }
+
+        return data;
+    }
 }
 
 const product = new Product();

@@ -6,10 +6,10 @@ class Product {
         this.MDBURI=process.env.MONGO_URI_LOCAL;
     }
 
-    async getProduct(id=false){
+    async getProduct(filter={}){
         try {
             await mongoose.connect(this.MDBURI);
-            if (!id) {
+            if (!filter.id) {
                 const data = [];
                 const d = await productModel.find();
                 for (const product of d) {
@@ -78,6 +78,36 @@ class Product {
         }finally{
             await mongoose.disconnect();
         }           
+    }
+
+    async filter(filter={}){
+        const data = await this.getProduct();
+        console.log(filter);
+        if (data.length == 0) {
+            return [];
+        }
+
+        if ("name" in filter) {
+            const dataFilter = data.filter(d=>d.name === filter.name);  
+            return dataFilter;
+        }
+
+        if ("code" in filter) {
+            const dataFilter = data.filter(d=>d.code == filter.code)
+            return dataFilter;
+        }
+
+        if ("price" in filter) {
+            const dataFilter = data.filter(d=>d.price > parseInt(filter.price.from) && d.price < parseInt(filter.price.to))
+            return dataFilter;
+        }
+        
+        if ("stock" in filter) {
+            const dataFilter = data.filter(d=>d.stock > parseInt(filter.stock.from) && d.stock < parseInt(filter.stock.to))
+            return dataFilter;
+        }
+
+        return data;
     }
 }
 

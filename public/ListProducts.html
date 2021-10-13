@@ -39,6 +39,18 @@
            </div>
         </nav>
         <h1 class="text-center text-light mt-4">Product List</h1>
+        <div class="d-flex justify-content-start m-5 col-9">
+            <select id="selectFilter" class="form-control me-3" style="width: 10%;" onchange="filter()">
+                <option value="1">Name</option>
+                <option value="2">Code</option>
+                <option value="3">Price</option>
+                <option value="4">Stock</option>
+            </select>
+            <div id="filter" >
+                <input type="text" class="form-control" id="name" placeholder="Name">
+            </div>
+            <input type="button" value="Search" class="btn btn-success ms-3" onclick="search()">
+        </div>
         <div class="d-flex justify-content-center">  
             <div id="list">
             </div>
@@ -105,6 +117,81 @@
             .then(res => res.json())
             .catch(error => console.error('Error:', error))
             .then(response => console.log(response));
+    }
+    const filter = ()=>{
+        const filter = parseInt(document.getElementById("selectFilter").value);
+        switch (filter) {
+            case 1:
+                document.getElementById("filter").innerHTML = '<input type="text" class="form-control" id="name" placeholder="Name">';
+                break;
+            case 2:
+                document.getElementById("filter").innerHTML = '<input type="number" class="form-control" id="code" placeholder="Code">';
+                break;  
+            case 3:
+                document.getElementById("filter").innerHTML = '<input type="number" class="form-control mb-4" id="from" placeholder="From"> <input type="number" class="form-control" id="to" placeholder="To">';
+                break; 
+            case 4:
+                document.getElementById("filter").innerHTML = '<input type="number" class="form-control mb-4" id="from" placeholder="From"> <input type="number" class="form-control" id="to" placeholder="To">';
+                break;      
+            default:
+                break;
+        }
+    }
+    const search = ()=>{
+        const data = {};
+        const filter = parseInt(document.getElementById("selectFilter").value);
+        switch (filter) {
+            case 1:
+                data.name = document.getElementById("name").value
+                break;
+            case 2:
+                data.code = document.getElementById("code").value
+                break;  
+            case 3:
+                data.price = { from:document.getElementById("from").value, to:document.getElementById("to").value,}
+                break;     
+            case 4:
+                data.stock = { from:document.getElementById("from").value, to:document.getElementById("to").value,}
+                break; 
+            default:
+                break;
+        }
+        fetch("http://localhost:8080/products/filter", {
+        method: 'POST', 
+        body: JSON.stringify(data),
+        headers:{
+            'Content-Type': 'application/json'
+        }
+        }).then(res => res.json())
+        .catch(error => console.error('Error:', error))
+        .then(data => {
+            const listProduct = Handlebars.compile(`
+                {{#if data.length}}
+                    {{#each data}}
+                        <div class="card m-5" style="width: 18rem;">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/hg-store-293e9.appspot.com/o/product.png?alt=media&token=5ef8328d-6062-4d30-956b-9a780e83c0a8" class="card-img-top ms-4 mt-2" alt="" style="width: 80%;">
+                            <div class="card-body">                        
+                                <h5 class="card-title">Name: {{name}}</h5>
+                                <h5 class="card-title">Timestamp: {{timestamp}}</h5>
+                                <p class="card-text fw-bold">Description: {{description}}</p>
+                                <h5 class="card-title">Code: {{code}}</h5>
+                                <h5 class="card-title">Price: {{price}} Cop</h5>
+                                <h5 class="card-title mb-4">Stock: {{stock}} Unidades</h5>
+                                <a href="http://localhost:8080/UpdateProduct.html?id={{id}}" class="btn btn-primary">Edit</a>
+                                <a class="btn btn-danger ms-3" onclick="deleteProduct('{{id}}')">Delete</a>
+                                <br>
+                                <a class="btn btn-success mt-3" onclick="addToCart('{{id}}')">Add to Cart</a>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <div class="alert alert-warning m-5" role="alert">Products not found.</div>
+                {{/if}}
+            `);
+            const lista = listProduct({data});
+            const div = document.getElementById("list");
+            div.innerHTML = lista;
+        });
     }
 </script>
 </html>
