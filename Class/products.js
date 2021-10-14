@@ -24,7 +24,7 @@ module.exports = { init: (n)=>{
             return { product } = require("./MondoDB/BDaaS.js");
             break;
 
-        case 5:
+        case 6:
             return { product } = require("./FireBase/firebase.js");
             break;
     

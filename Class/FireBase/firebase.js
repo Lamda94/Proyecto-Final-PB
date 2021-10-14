@@ -1,8 +1,8 @@
 const firebaseAdmin = require('firebase-admin');
-
+const serviceAccount = require("./db/ecommerce-ch-30b8e-firebase-adminsdk-flbpr-e10a2c17b5.json");
 firebaseAdmin.initializeApp({
-    credential: "./db/ecommerce-9c209-firebase-adminsdk-xzvd7-705d383531.json",
-    databaseURL: "https://ecommerce-9c209.firebaseio.com"
+    credential: firebaseAdmin.credential.cert(serviceAccount),
+    databaseURL: "https://ecommerce-ch-30b8e.firebaseio.com",
 });
 
 class Product {
@@ -26,23 +26,22 @@ class Product {
                     stock: d.stock,
                 }
             })
-            console.log(data);
             return data;
         }
         const queryGet = await this.collection.get();
-        const data = queryGet.docs.map(doc=>{
+        const data = queryGet.docs.map((doc)=>{
             const d = doc.data();
-            return{
+            const response = {
                 id:doc.id,
                 name: d.name,
                 description: d.description,
                 code: d.code,
-                picture: dadta.picture,
+                picture: d.picture,
                 price: d.price,
                 stock: d.stock,
-            }
-        })
-        console.log(data);
+            };
+            return response;
+        });
         return data;
     }
 
@@ -51,11 +50,12 @@ class Product {
             let id = 1;
             const d = await this.getProduct();
             if(d.length > 0){
-                id = (d[d.length-1].id+1);
+                id = (parseInt(d[d.length-1].id)+1);
             }
-            await this.collection.doc(id).create(data);
-            return {id:id, ...data};
+            const response = await this.collection.doc(id.toString()).create(data);
+            return response;
         } catch (err) {
+            console.log(err);
            return err
         }
     }
@@ -111,7 +111,3 @@ class Product {
 const product = new Product();
 
 module.exports = { product };
-
-/*(async ()=>{
-    console.log(await product.getProduct());
-})()*/
