@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const {menssageModel} = require("../models/menssage.model.js");
 require('dotenv').config();
 
-class File{ 
+class Chat{ 
     constructor(){
         this.MDBURI=process.env.MONGO_URI;
     }
@@ -21,15 +21,8 @@ class File{
 
     async addMenssage(data){    
         try {
-            await mongoose.connect(this.MDBURI);
-
-            const dataMensage = {
-                email:data.email, 
-                menssage:data.menssage,
-            };
-            
-            const menssage = menssageModel.insertMany(dataMensage);
-
+            await mongoose.connect(this.MDBURI);            
+            const menssage = menssageModel.insertMany(data);
             return menssage;
         } catch (err) {
             console.log(err);
@@ -39,6 +32,6 @@ class File{
     }
 }
 
-const chatMenssage = new File();
+const chatMenssage = new Chat();
 
 module.exports = {chatMenssage};

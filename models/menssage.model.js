@@ -2,17 +2,17 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const menssageSchema = new Schema({
-    email:{
+    author:{
+        id: Number,
+        name: String,
+        lastname: String,
+        age: Number,
+        nickname: String,
+        avatar: String,
+    },
+    text:{
         type: String,
         required: true,
-    },
-    menssage:{
-        type: String,
-        required: true,
-    },
-    date:{
-        type: Date, 
-        default: Date.now 
     },
 });
 
