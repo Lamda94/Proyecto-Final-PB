@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -54,7 +43,6 @@ require("dotenv").config();
 var p = process.env.PERSISTENCIA;
 var persis = parseInt(p);
 var normalizr_1 = require("normalizr");
-var util_1 = __importDefault(require("util"));
 var express_1 = __importDefault(require("express"));
 var app = express_1.default();
 var server = require('http').createServer(app);
@@ -66,24 +54,33 @@ var url = __dirname.replace("Server", "\public");
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static(url));
+var chatNormalized = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var data, authorSchema, chatSchema, chatListSchema, menssage;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, chatMenssage.getMenssage()];
+            case 1:
+                data = _a.sent();
+                authorSchema = new normalizr_1.schema.Entity('author', {}, { idAttribute: 'nickname' });
+                chatSchema = new normalizr_1.schema.Entity('menssages', {
+                    author: authorSchema,
+                });
+                chatListSchema = new normalizr_1.schema.Array(chatSchema);
+                menssage = normalizr_1.normalize(data, chatListSchema);
+                return [2 /*return*/, menssage];
+        }
+    });
+}); };
 ioServer.on("connection", function (socket) { return __awaiter(void 0, void 0, void 0, function () {
-    var products, response, data, authorSchema, chatSchema, menssage;
+    var products, menssage;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, product.getProduct()];
             case 1:
                 products = _a.sent();
-                return [4 /*yield*/, chatMenssage.getMenssage()];
+                return [4 /*yield*/, chatNormalized()];
             case 2:
-                response = _a.sent();
-                data = __assign({}, response);
-                authorSchema = new normalizr_1.schema.Entity('author');
-                chatSchema = new normalizr_1.schema.Entity('chat', {
-                    author: authorSchema,
-                });
-                menssage = normalizr_1.normalize(data, chatSchema);
-                ///console.log(menssage);
-                console.log(util_1.default.inspect(menssage, false, 12, true));
+                menssage = _a.sent();
                 socket.emit("productList", products);
                 socket.emit("chat", { validate: true, data: menssage });
                 socket.on("addMenssage", function (data) { return __awaiter(void 0, void 0, void 0, function () {
@@ -93,7 +90,7 @@ ioServer.on("connection", function (socket) { return __awaiter(void 0, void 0, v
                             case 0: return [4 /*yield*/, chatMenssage.addMenssage(data)];
                             case 1:
                                 _a.sent();
-                                return [4 /*yield*/, chatMenssage.getMenssage()];
+                                return [4 /*yield*/, chatNormalized()];
                             case 2:
                                 menssage = _a.sent();
                                 socket.emit("chat", { validate: true, data: menssage });

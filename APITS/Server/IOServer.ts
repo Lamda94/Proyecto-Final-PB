@@ -18,25 +18,26 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(url));
 
-ioServer.on("connection", async (socket:any) => {
-    let products = await product.getProduct();
-    
-    const response = await chatMenssage.getMenssage();
-    const data = {...response};
-    
-    const authorSchema = new schema.Entity('author');
-    const chatSchema = new schema.Entity('chat', {
+const chatNormalized = async():Promise<any>=>{
+    const data = await chatMenssage.getMenssage();
+    const authorSchema = new schema.Entity('author',{},{idAttribute: 'nickname'});
+    const chatSchema = new schema.Entity('menssages', {
         author: authorSchema,
     });
-    const menssage = normalize(data, chatSchema);
-    ///console.log(menssage);
-    
-    console.log(util.inspect(menssage, false, 12, true));
+    const chatListSchema = new schema.Array(chatSchema);
+    const menssage = normalize(data, chatListSchema);
+    return menssage;
+};
+
+ioServer.on("connection", async (socket:any) => {
+    let products = await product.getProduct();
+    const menssage = await chatNormalized();
+
     socket.emit("productList", products);
     socket.emit("chat", {validate:true, data:menssage});
-    socket.on("addMenssage", async (data:any)=>{  
+    socket.on("addMenssage", async (data:any)=>{ 
         await chatMenssage.addMenssage(data);
-        let menssage = await chatMenssage.getMenssage();
+        const menssage = await chatNormalized();
         socket.emit("chat", {validate:true, data:menssage});        
     })  
 });

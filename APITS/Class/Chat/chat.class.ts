@@ -17,7 +17,6 @@ class Chat{
                 const data = {
                     id: i++,
                     author:{
-                        id: i,
                         name:menssage.author.name,
                         lastname:menssage.author.lastname,
                         age:menssage.author.age,
@@ -40,18 +39,8 @@ class Chat{
         try {
             await mongoose.connect(this.MDBURI);            
             await menssageModel.insertMany(data);
-            const response = menssageModel.find().sort({$natural:-1}).limit(1);
-            const menssage = {
-                id: response._id,
-                author:{
-                    name:response.author.name,
-                    lastname:response.author.lastname,
-                    age:response.author.age,
-                    nickname:response.author.nickname,
-                    avatar:response.author.avatar,
-                },
-                text:response.text
-            }
+            const response:IMenssage[] = await this.getMenssage();
+            const menssage:IMenssage = response[response.length-1];
             return menssage;
         } catch (err) {
             throw {status: 500, menssage: "Error de base de datos", error:err};

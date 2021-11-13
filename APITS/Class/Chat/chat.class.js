@@ -65,7 +65,6 @@ var Chat = /** @class */ (function () {
                             var data = {
                                 id: i_1++,
                                 author: {
-                                    id: i_1,
                                     name: menssage.author.name,
                                     lastname: menssage.author.lastname,
                                     age: menssage.author.age,
@@ -95,34 +94,26 @@ var Chat = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, 4, 6]);
+                        _a.trys.push([0, 4, 5, 7]);
                         return [4 /*yield*/, mongoose_1.default.connect(this.MDBURI)];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, menssageModel.insertMany(data)];
                     case 2:
                         _a.sent();
-                        response = menssageModel.find().sort({ $natural: -1 }).limit(1);
-                        menssage_1 = {
-                            id: response._id,
-                            author: {
-                                name: response.author.name,
-                                lastname: response.author.lastname,
-                                age: response.author.age,
-                                nickname: response.author.nickname,
-                                avatar: response.author.avatar,
-                            },
-                            text: response.text
-                        };
-                        return [2 /*return*/, menssage_1];
+                        return [4 /*yield*/, this.getMenssage()];
                     case 3:
+                        response = _a.sent();
+                        menssage_1 = response[response.length - 1];
+                        return [2 /*return*/, menssage_1];
+                    case 4:
                         err_2 = _a.sent();
                         throw { status: 500, menssage: "Error de base de datos", error: err_2 };
-                    case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
-                    case 5:
+                    case 5: return [4 /*yield*/, mongoose_1.default.disconnect()];
+                    case 6:
                         _a.sent();
                         return [7 /*endfinally*/];
-                    case 6: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });

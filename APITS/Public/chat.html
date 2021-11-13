@@ -56,8 +56,9 @@
         </div>
     </div>  
     <div id="List" class="d-flex justify-content-center"></div>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center">        
         <div class="col-8 bg-light p-5 mb-5 rounded">
+            <h2 class="text-center mb-2" id="compresion"></h2>
             <h1 class="text-center">Chat</h1>
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Name</label>
@@ -93,6 +94,7 @@
         </div>
     </div>
     <script>
+        const { schema, denormalize } = normalizr;
         const ioSocket = io();
         const listProduct = Handlebars.compile(`
         <div class="col-8 bg-dark p-5 mb-5">
@@ -144,14 +146,23 @@
         });
 
         ioSocket.on("chat", (d)=>{
-            console.log("Hola Mundo");
-            console.log(d);
             if (d.validate) {
-                const data = d.data;
-                /*const Mensages = chatMenssage({data});
+                const normalized = d.data;
+                const normalizedLength = JSON.stringify(normalized).length;
+                const authorSchema = new schema.Entity('author',{},{idAttribute: 'nickname'});
+                const chatSchema = new schema.Entity('menssages', {
+                    author: authorSchema,
+                });
+                const chatListSchema = new schema.Array(chatSchema);
+                const data = denormalize(normalized.result, chatListSchema, normalized.entities);
+                const denormalizedLength = JSON.stringify(data).length;
+                const porcentaje = `${Math.trunc((normalizedLength-denormalizedLength)*100/normalizedLength)}% de compresión`;
+                console.log(porcentaje);
+                const Mensages = chatMenssage({data});
                 //console.log(Mensages);
+                document.getElementById("compresion").innerHTML = porcentaje;
                 const div = document.getElementById("chat");
-                div.innerHTML = Mensages;*/
+                div.innerHTML = Mensages;
             }else{
                 document.getElementById("notification").innerHTML = `<div class="alert alert-danger" role="alert">Informacion no valida!</div>`;
                 setTimeout(()=>{ 
@@ -171,7 +182,6 @@
             if (name !== "" && menssage !== "") {
                 const data ={
                     author:{
-                        id: Math.round(Math.random() * (100 - 1) + 1),
                         name,
                         lastname,
                         age,
