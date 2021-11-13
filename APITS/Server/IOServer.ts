@@ -32,7 +32,6 @@ const chatNormalized = async():Promise<any>=>{
 ioServer.on("connection", async (socket:any) => {
     let products = await product.getProduct();
     const menssage = await chatNormalized();
-
     socket.emit("productList", products);
     socket.emit("chat", {validate:true, data:menssage});
     socket.on("addMenssage", async (data:any)=>{ 

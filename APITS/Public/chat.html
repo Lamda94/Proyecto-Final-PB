@@ -140,7 +140,7 @@
 
         ioSocket.on("productList", (data)=>{
             const lista = listProduct({data});
-            console.log(data);
+            //console.log(data);
             const div = document.getElementById("List");
             div.innerHTML = lista;
         });
@@ -157,9 +157,9 @@
                 const data = denormalize(normalized.result, chatListSchema, normalized.entities);
                 const denormalizedLength = JSON.stringify(data).length;
                 const porcentaje = `${Math.trunc((normalizedLength-denormalizedLength)*100/normalizedLength)}% de compresión`;
-                console.log(porcentaje);
+                //console.log(porcentaje);
                 const Mensages = chatMenssage({data});
-                //console.log(Mensages);
+                //console.log(normalized);
                 document.getElementById("compresion").innerHTML = porcentaje;
                 const div = document.getElementById("chat");
                 div.innerHTML = Mensages;
