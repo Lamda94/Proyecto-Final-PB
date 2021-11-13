@@ -9,8 +9,23 @@ class Chat{
 
     async getMenssage(){
         try {
+            let i = 0;
             await mongoose.connect(this.MDBURI);
-            const data = await menssageModel.find();            
+            const d = await menssageModel.find(); 
+            const data = d.map(doc=>{
+                    return {
+                        id: i++,
+                        author:{
+                            id:doc.author.id,
+                            name: doc.author.name,
+                            lastname: doc.author.lastname,
+                            age: doc.author.age,
+                            nickname: doc.author.nickname,
+                            avatar: doc.author.avatar
+                        },
+                        text: doc.text,
+                    }
+            });           
             return data;
         } catch (err) {
             console.log(err);
@@ -22,7 +37,7 @@ class Chat{
     async addMenssage(data){    
         try {
             await mongoose.connect(this.MDBURI);            
-            const menssage = menssageModel.insertMany(data);
+            const menssage = await menssageModel.insertMany(data);
             return menssage;
         } catch (err) {
             console.log(err);

@@ -1,9 +1,10 @@
 const handlebars = require("express-handlebars");
 const products = require("./Routes/products.routes.js");
 const carts = require('./Routes/cart.routes.js');
+const chat = require("./Routes/chat.routes.js")
 const {notFound} = require("./middleware/routeNotFound.js");
 
-const { ioServer, app, server} = require("./Server/Server");
+const { app, server} = require("./Server/Server");
 
 const ENGINE_NAME = "hbs";
 
@@ -22,14 +23,12 @@ app.set("views", "./views");
 
 app.use("/products", products);
 app.use("/carts", carts);
-app.get("/", (req, res)=>{
+app.use("/chat", chat);
+/*app.get("/", (req, res)=>{
    const url = __dirname+"\\public\\ListProducts.html";
     res.sendFile(url);
-})
-app.get("/chat", (req, res)=>{
-  const url = __dirname+"\\public\\chat.html";
-   res.sendFile(url);
-})
+})*/
+
 app.use(notFound);
 
 const PORT = 8080;

@@ -144,6 +144,7 @@
         });
 
         ioSocket.on("chat", (d)=>{
+            console.log("Hola Mundo");
             console.log(d);
             if (d.validate) {
                 const data = d.data;

@@ -6,11 +6,12 @@ var products = require("./Routes/products.routes.js");
 
 var carts = require('./Routes/cart.routes.js');
 
+var chat = require("./Routes/chat.routes.js");
+
 var _require = require("./middleware/routeNotFound.js"),
     notFound = _require.notFound;
 
 var _require2 = require("./Server/Server"),
-    ioServer = _require2.ioServer,
     app = _require2.app,
     server = _require2.server;
 
@@ -25,14 +26,12 @@ app.set("view engine", ENGINE_NAME);
 app.set("views", "./views");
 app.use("/products", products);
 app.use("/carts", carts);
-app.get("/", function (req, res) {
-  var url = __dirname + "\\public\\ListProducts.html";
-  res.sendFile(url);
-});
-app.get("/chat", function (req, res) {
-  var url = __dirname + "\\public\\chat.html";
-  res.sendFile(url);
-});
+app.use("/chat", chat);
+/*app.get("/", (req, res)=>{
+   const url = __dirname+"\\public\\ListProducts.html";
+    res.sendFile(url);
+})*/
+
 app.use(notFound);
 var PORT = 8080;
 server.listen(PORT, function () {

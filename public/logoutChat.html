@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+    <style>
+        .email{
+            color: #0311F6;
+        }
+        .date{
+            color: #FA0000;
+        }
+        .menssage{
+            color: green;
+        }
+    </style>
+    <title>Document 1</title>
+</head>
+<body class="bg-dark">
+    <div class="container-fluid d-flex justify-content-center pt-5" style="height: 100vh;">
+        <div class=" col-5 bg-light m-5 p-5 rounded">
+            <div class="alert alert-success" role="alert"> Hasta Luego </div>
+        </div>
+    </div>  
+    <script>
+        setTimeout(()=>{
+            window.location="http://localhost:8080/chat/login";
+        }, 3000);
+    </script>
+</body>
+</html>
