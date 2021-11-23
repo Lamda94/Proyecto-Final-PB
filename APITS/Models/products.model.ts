@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
- const { Schema } = mongoose;
+ const { Schema, model } = mongoose;
  const productSchema = new Schema({
     timestamp: {
         type: Date, 
@@ -31,6 +31,6 @@ import mongoose from 'mongoose';
     },
 });
 
-const productModel = mongoose.model("products", productSchema);
+const productModel = model("products", productSchema);
 
 export default productModel;

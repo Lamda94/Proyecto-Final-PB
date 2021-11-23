@@ -1,9 +1,8 @@
-
+const cart = require('./Routes/cart.routes');
 const session = require('express-session');
 const handlebars = require("express-handlebars");
 const products = require("./Routes/products.routes.js");
-const menssage = require('./Routes/chat.routes');
-//const carts = require('./Routes/cart.routes.js');
+const acces = require('./Routes/acces.routes.js');
 const cors = require('cors');
 const {notFound} = require("./Middlewares/routeNotFound");
 
@@ -18,31 +17,18 @@ const sessionHandler = session({
     },
 });
 
-const url = __dirname.replace("Server", "\\public");
+
 
 app.use(sessionHandler);
 
+app.use(cors());
 
-const ENGINE_NAME:string = "hbs";
+app.set("views", __dirname + "/Views");
+app.set("view engine", "pug");
 
-app.use(cors())
-
-app.engine(
-  ENGINE_NAME,
-  handlebars({
-    extname: ".hbs",
-    layoutsDir:"./views/layout",
-    partialsDir:"./views/partials",
-    defaultLayout: "index.hbs",
-  })
-);
-
-app.set("view engine", ENGINE_NAME);
-app.set("views", "./views");
-
+app.use("/cart", cart);
 app.use("/products", products);
-//app.use("/carts", carts);
-app.use("/chat", menssage);
+app.use("/", acces);
 app.use(notFound);
 
 const PORT:number = 8080;

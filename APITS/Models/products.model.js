@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
-var Schema = mongoose_1.default.Schema;
+var Schema = mongoose_1.default.Schema, model = mongoose_1.default.model;
 var productSchema = new Schema({
     timestamp: {
         type: Date,
@@ -35,5 +35,5 @@ var productSchema = new Schema({
         required: true,
     },
 });
-var productModel = mongoose_1.default.model("products", productSchema);
+var productModel = model("products", productSchema);
 exports.default = productModel;

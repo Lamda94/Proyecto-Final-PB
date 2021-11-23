@@ -1,0 +1,44 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css")
+        script(src="https://cdn.socket.io/4.0.1/socket.io.min.js")
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js")
+        title Products
+    body(class="bg-dark")
+        if(login)
+            div(class="col-5 pt-5" style="margin: auto;")
+                div(class="alert alert-success" role="alert") 
+                    h2(style="display:inline-block;") #{saludo}
+                    a( class="btn btn-success ms-5" href="/logout") Log Out
+            div(class="container-fluid d-flex justify-content-center")
+                div(class=" col-5 bg-light m-5 p-5 rounded")
+                    include ./newProduct.pug
+            div(id="List" class="d-flex justify-content-center")
+            script(src="/scripts/index.js")
+        else if(logout)
+            div(class="container-fluid d-flex justify-content-center pt-5" style="height: 100vh;")
+                .col-5.bg-light.m-5.p-5.rounded
+                    div(class="alert alert-success" role="alert") 
+                        h2(style="display:inline-block;") #{saludo}
+            script. 
+                setTimeout(() => {
+                    window.location.href = "/login"
+                }, 2000)
+                    
+        else
+            div(class="container-fluid d-flex justify-content-center pt-5" style="height: 100vh;")
+                .col-5.bg-light.m-5.p-5.rounded
+                    h2(class="text-center mb-5") Login
+                    form(action="/login" method="post")
+                        .mb-3.row
+                            label(for="inputPassword" class="col-sm-2 col-form-label") Name
+                            .col-sm-10
+                                input(type="text" class="form-control" name="name")
+                        button(class="btn btn-primary" type="submit") Login
+         
+

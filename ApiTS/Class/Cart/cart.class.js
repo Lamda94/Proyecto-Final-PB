@@ -35,81 +35,84 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var menssageModel = require("../../models/menssage.model").menssageModel;
-require('dotenv').config();
-var muri = process.env.MONGO_URI;
-var Chat = /** @class */ (function () {
-    function Chat() {
-        this.MDBURI = muri;
+var mongoose = require('mongoose');
+var cartModel = require('../../Models/cart.model');
+var Cart = /** @class */ (function () {
+    function Cart() {
+        this.MDBURI = process.env.MONGO_URI;
     }
-    Chat.prototype.getMenssage = function () {
+    Cart.prototype.getCart = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var i_1, response, data, err_1;
+            var cart_1, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, 4, 6]);
-                        i_1 = 1;
-                        return [4 /*yield*/, mongoose_1.default.connect(this.MDBURI)];
+                        _a.trys.push([0, 2, 3, 4]);
+                        mongoose.connect(this.MDBURI);
+                        return [4 /*yield*/, cartModel.find({})];
                     case 1:
-                        _a.sent();
-                        return [4 /*yield*/, menssageModel.find()];
+                        cart_1 = _a.sent();
+                        return [2 /*return*/, cart_1];
                     case 2:
-                        response = _a.sent();
-                        data = response.map(function (menssage) {
-                            var data = {
-                                id: i_1++,
-                                author: {
-                                    name: menssage.author.name,
-                                    lastname: menssage.author.lastname,
-                                    age: menssage.author.age,
-                                    nickname: menssage.author.nickname,
-                                    avatar: menssage.author.avatar,
-                                },
-                                text: menssage.text
-                            };
-                            return data;
-                        });
-                        return [2 /*return*/, data];
+                        error_1 = _a.sent();
+                        return [2 /*return*/, []];
                     case 3:
-                        err_1 = _a.sent();
-                        throw { status: 500, menssage: "Error de base de datos", error: err_1 };
-                    case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
-                    case 5:
-                        _a.sent();
+                        mongoose.disconnect();
                         return [7 /*endfinally*/];
-                    case 6: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    Chat.prototype.addMenssage = function (data) {
+    Cart.prototype.AddToCart = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var response, menssage, err_2;
+            var cart, newCart;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getCart()];
+                    case 1:
+                        cart = _a.sent();
+                        cart[0].products.push(data);
+                        cartModel.insertMany(cart);
+                        return [4 /*yield*/, this.getCart()];
+                    case 2:
+                        newCart = _a.sent();
+                        return [2 /*return*/, newCart];
+                }
+            });
+        });
+    };
+    Cart.prototype.RemoveToCart = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cart_2, newCart, newCart2, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, 5, 7]);
-                        return [4 /*yield*/, mongoose_1.default.connect(this.MDBURI)];
+                        return [4 /*yield*/, mongoose.connect(this.MDBURI)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, menssageModel.insertMany(data)];
+                        return [4 /*yield*/, this.getCart()];
                     case 2:
-                        _a.sent();
-                        return [4 /*yield*/, this.getMenssage()];
+                        cart_2 = _a.sent();
+                        newCart = cart_2.filter(function (item) {
+                            var data = {
+                                _id: item._id,
+                                timestamp: item.timestamp,
+                                products: item.products.filter(function (product) { return product.id != id; }),
+                            };
+                            return data;
+                        });
+                        cartModel.updateMany(newCart);
+                        return [4 /*yield*/, this.getCart()];
                     case 3:
-                        response = _a.sent();
-                        menssage = response[response.length - 1];
-                        return [2 /*return*/, menssage];
+                        newCart2 = _a.sent();
+                        return [2 /*return*/, newCart2];
                     case 4:
-                        err_2 = _a.sent();
-                        throw { status: 500, menssage: "Error de base de datos", error: err_2 };
-                    case 5: return [4 /*yield*/, mongoose_1.default.disconnect()];
+                        error_2 = _a.sent();
+                        return [2 /*return*/, []];
+                    case 5: return [4 /*yield*/, mongoose.disconnect()];
                     case 6:
                         _a.sent();
                         return [7 /*endfinally*/];
@@ -118,7 +121,6 @@ var Chat = /** @class */ (function () {
             });
         });
     };
-    return Chat;
+    return Cart;
 }());
-var chatMenssage = new Chat();
-module.exports = { chatMenssage: chatMenssage };
+exports.default = Cart;

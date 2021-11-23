@@ -40,16 +40,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-//const { io } = require("../Class/Chat/server");
-var chat = express_1.default.Router();
-chat.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var router = express_1.default.Router();
+router.get("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data;
     return __generator(this, function (_a) {
-        /*io.on("connection", async (socket:any) => {
-            socket.on("chat", async (d:any)=>{
-                let menssage = d.data;*/
-        res.json({ m: "Hola mundo" });
-        return [2 /*return*/];
+        data = {
+            login: false,
+            saludo: "",
+            logout: false
+        };
+        if (req.session.name) {
+            data.login = true;
+            data.saludo = "Bienvenido " + req.session.name;
+            return [2 /*return*/, res.render("index.pug", data)];
+        }
+        return [2 /*return*/, res.render("index.pug", data)];
     });
 }); });
-//products.get("/vista-test", listTest);
-module.exports = chat;
+router.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        req.session.name = req.body.name;
+        return [2 /*return*/, res.redirect("/login")];
+    });
+}); });
+router.get("/logout", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+        data = {
+            login: false,
+            saludo: "Hasta luego " + req.session.name,
+            logout: true
+        };
+        req.session.destroy();
+        return [2 /*return*/, res.render("index.pug", data)];
+    });
+}); });
+module.exports = router;

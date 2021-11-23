@@ -1,0 +1,25 @@
+h2.text-center.mb-5 New Product 
+.mb-3.row
+    label(for="inputPassword" class="col-sm-2 col-form-label") Name
+    .col-sm-10
+        input(type="text" class="form-control" id="name")
+.mb-3.row
+    label(for="inputPassword" class="col-sm-2 col-form-label") Code
+    .col-sm-10
+        input(type="number" class="form-control" id="code")
+.mb-3.row
+    label(for="inputPassword" class="col-sm-2 col-form-label") Picture
+    .col-sm-10
+        input(type="text" class="form-control" id="picture")
+.mb-3.row
+    label(for="inputPassword" class="col-sm-2 col-form-label") Price
+    .col-sm-10
+        input(type="number" class="form-control" id="price")
+.mb-3.row
+    label(for="inputPassword" class="col-sm-2 col-form-label") Stock
+    .col-sm-10
+        input(type="number" class="form-control" id="stock")
+.mb-3
+    label(for="exampleFormControlTextarea1" class="form-label") Description
+    textarea(class="form-control" rows="3" id="description")
+button(class="btn btn-primary" onclick="newProduct()") Save
