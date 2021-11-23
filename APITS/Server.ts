@@ -3,23 +3,29 @@ const session = require('express-session');
 const handlebars = require("express-handlebars");
 const products = require("./Routes/products.routes.js");
 const acces = require('./Routes/acces.routes.js');
+const expressSession = require('express-session');
+const connectMongo = require('connect-mongo');
 const cors = require('cors');
 const {notFound} = require("./Middlewares/routeNotFound");
-
 const { ioServer, app, server} = require("./Server/IOServer");
 
-const sessionHandler = session({
-    secret: 'secreto',
-    resave: true,
-    saveUninitialized: true,
+require('dotenv').config();
+const muri:any = process.env.MONGO_URI;
+
+
+app.use(
+  expressSession({
+    store: connectMongo.create({
+      mongoUrl: muri,
+    }),
+    secret: 'BTC100K',
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-      maxAge: 60000,
+      maxAge: 10 * 60 * 1000,
     },
-});
-
-
-
-app.use(sessionHandler);
+  }),
+);
 
 app.use(cors());
 
