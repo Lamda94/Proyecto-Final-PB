@@ -2,6 +2,8 @@
 var cart = require('./Routes/cart.routes');
 var session = require('express-session');
 var handlebars = require("express-handlebars");
+var passport = require('passport');
+require('./Middlewares/Login.middleware').passport;
 var products = require("./Routes/products.routes.js");
 var acces = require('./Routes/acces.routes.js');
 var expressSession = require('express-session');
@@ -22,6 +24,8 @@ app.use(expressSession({
         maxAge: 10 * 60 * 1000,
     },
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cors());
 app.set("views", __dirname + "/Views");
 app.set("view engine", "pug");

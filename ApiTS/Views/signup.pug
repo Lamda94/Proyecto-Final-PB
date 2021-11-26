@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css")
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous")
+        title Products
+    body(class="bg-dark")
+        div(class="container-fluid d-flex justify-content-center pt-5" style="height: 100%;")
+            .col-5.bg-light.m-5.p-5.rounded
+                h2(class="text-center mb-5") Signup
+                form(action="/signup" method="post")
+                    .mb-3.row
+                        label(for="inputName" class="col-sm-2 col-form-label") Name
+                        .col-sm-10
+                            input(type="text" class="form-control" name="name")
+                    .mb-3.row
+                        label(for="inputPassword" class="col-sm-2 col-form-label") Password
+                        .col-sm-10
+                            input(type="text" class="form-control" name="name")
+                    button(class="btn btn-primary" type="submit") signup
+         
+

@@ -1,23 +1,20 @@
 import  express from "express";
+import { checkAuthentication, loginStrategyName, signUpStrategyName, passport } from "../Middlewares/Login.middleware";
 
 const router = express.Router();
 
-router.get("/login", async(req:any, res:any) => {
+router.get("/login", checkAuthentication, async(req:any, res:any) => {
     const data = {
-        login: false,
-        saludo: "",
+        login: true,
+        saludo: "Bienvenido "+req.session.name,
         logout: false
     }
-    if (req.session.name) {
-        data.login = true;
-        data.saludo = "Bienvenido "+req.session.name;
-        return res.render("index.pug", data);
-    }   
     return res.render("index.pug", data);
 });
 
-router.post("/login", async(req:any, res:any) => {
+router.post("/login", passport.authenticate(loginStrategyName), async(req:any, res:any) => {
     req.session.name = req.body.name;
+    req.session.password = req.body.password;
     return res.redirect("/login");
 });
 
@@ -29,6 +26,9 @@ router.get("/logout", async(req:any, res:any) => {
     }
     req.session.destroy();
     return res.render("index.pug", data);
-})
+});
 
+router.get("/signup", (req:any, res:any) => res.render("signup.pug"));
+
+router.post("/signup",passport.authenticate(signUpStrategyName, { failureRedirect: '/failsignup', successRedirect: '/login' }));
 module.exports = router;

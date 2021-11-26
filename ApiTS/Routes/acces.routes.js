@@ -40,26 +40,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var Login_middleware_1 = require("../Middlewares/Login.middleware");
 var router = express_1.default.Router();
-router.get("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get("/login", Login_middleware_1.checkAuthentication, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var data;
     return __generator(this, function (_a) {
         data = {
-            login: false,
-            saludo: "",
+            login: true,
+            saludo: "Bienvenido " + req.session.name,
             logout: false
         };
-        if (req.session.name) {
-            data.login = true;
-            data.saludo = "Bienvenido " + req.session.name;
-            return [2 /*return*/, res.render("index.pug", data)];
-        }
         return [2 /*return*/, res.render("index.pug", data)];
     });
 }); });
-router.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.post("/login", Login_middleware_1.passport.authenticate(Login_middleware_1.loginStrategyName), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         req.session.name = req.body.name;
+        req.session.password = req.body.password;
         return [2 /*return*/, res.redirect("/login")];
     });
 }); });
@@ -75,4 +72,6 @@ router.get("/logout", function (req, res) { return __awaiter(void 0, void 0, voi
         return [2 /*return*/, res.render("index.pug", data)];
     });
 }); });
+router.get("/signup", function (req, res) { return res.render("signup.pug"); });
+router.post("/signup", Login_middleware_1.passport.authenticate(Login_middleware_1.signUpStrategyName, { failureRedirect: '/failsignup', successRedirect: '/login' }));
 module.exports = router;
