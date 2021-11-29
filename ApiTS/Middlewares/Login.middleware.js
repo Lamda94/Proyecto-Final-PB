@@ -41,6 +41,7 @@ var mongoose = require("mongoose");
 var passport = require('passport');
 exports.passport = passport;
 var Strategy = require('passport-local').Strategy;
+var passportFacebook = require("passport-facebook").Strategy;
 var userModel = require("../Models/user.model").userModel;
 exports.loginStrategyName = 'login';
 exports.signUpStrategyName = 'Signup';
@@ -114,25 +115,14 @@ passport.use(exports.signUpStrategyName, new Strategy({
         }
     });
 }); }));
-passport.serializeUser(function (user, done) {
-    console.log("serializeUser");
-    done(null, user);
-});
-passport.deserializeUser(function (user, done) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                console.log("deserializeUser");
-                _a = done;
-                _b = [null];
-                return [4 /*yield*/, findUser(user.name)];
-            case 1:
-                _a.apply(void 0, _b.concat([_c.sent()]));
-                return [2 /*return*/];
-        }
-    });
-}); });
+passport.use(new passportFacebook({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+    profileFields: ['id', 'displayName', 'email', 'first_name', 'last_name', 'middle_name', 'picture.type(large)'],
+}, function (_accessToken, _refreshToken, profile, done) { return done(null, profile); }));
+passport.serializeUser(function (user, done) { return done(null, user); });
+passport.deserializeUser(function (user, done) { return done(null, user); });
 var checkAuthentication = function (request, response, next) {
     if (request.isAuthenticated()) {
         return next();

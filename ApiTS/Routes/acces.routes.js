@@ -42,15 +42,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var Login_middleware_1 = require("../Middlewares/Login.middleware");
 var router = express_1.default.Router();
-router.get("/login", Login_middleware_1.checkAuthentication, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
+router.get("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var d, data, data, data;
     return __generator(this, function (_a) {
-        data = {
-            login: true,
-            saludo: "Bienvenido " + req.session.name,
-            logout: false
-        };
-        return [2 /*return*/, res.render("index.pug", data)];
+        if (req.session.passport) {
+            d = JSON.parse(JSON.stringify(req.user._json));
+            req.session.name = d.first_name;
+            req.session.method = "facebook";
+            data = {
+                login: true,
+                saludo: "Bienvenido " + req.session.name,
+                logout: false
+            };
+            return [2 /*return*/, res.render("index.pug", data)];
+        }
+        else if (req.session.name) {
+            data = {
+                login: true,
+                saludo: "Bienvenido " + req.session.name,
+                logout: false
+            };
+            return [2 /*return*/, res.render("index.pug", data)];
+        }
+        else {
+            data = {
+                login: false,
+                saludo: "",
+                logout: false
+            };
+            return [2 /*return*/, res.render("index.pug", data)];
+        }
+        return [2 /*return*/];
     });
 }); });
 router.post("/login", Login_middleware_1.passport.authenticate(Login_middleware_1.loginStrategyName), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -68,10 +90,18 @@ router.get("/logout", function (req, res) { return __awaiter(void 0, void 0, voi
             saludo: "Hasta luego " + req.session.name,
             logout: true
         };
+        if (req.session.method === "facebook") {
+            req.logout();
+        }
         req.session.destroy();
         return [2 /*return*/, res.render("index.pug", data)];
     });
 }); });
+router.get('/auth/facebook', Login_middleware_1.passport.authenticate('facebook', { authType: 'reauthenticate' }));
+router.get('/auth/facebook/callback', Login_middleware_1.passport.authenticate('facebook', {
+    successRedirect: '/login',
+    failureRedirect: '/faillogin',
+}));
 router.get("/signup", function (req, res) { return res.render("signup.pug"); });
 router.post("/signup", Login_middleware_1.passport.authenticate(Login_middleware_1.signUpStrategyName, { failureRedirect: '/failsignup', successRedirect: '/login' }));
 module.exports = router;

@@ -31,7 +31,7 @@ html(lang="en")
                 }, 2000)
                     
         else
-            div(class="container-fluid d-flex justify-content-center pt-5" style="height: 100vh;")
+            div(class="container-fluid d-flex justify-content-center pt-5" style="height: 100%;")
                 .col-5.bg-light.m-5.p-5.rounded
                     h2(class="text-center mb-5") Login
                     form(action="/login" method="post")
@@ -39,6 +39,12 @@ html(lang="en")
                             label(for="inputPassword" class="col-sm-2 col-form-label") Name
                             .col-sm-10
                                 input(type="text" class="form-control" name="name")
+                        .mb-3.row
+                            label(for="inputPassword" class="col-sm-2 col-form-label") Password
+                            .col-sm-10
+                                input(type="password" class="form-control" name="password")
                         button(class="btn btn-primary" type="submit") Login
+                        br
+                        a(href="/auth/facebook" class="mt1") login whith facebook
          
 

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
+const passportFacebook = require("passport-facebook").Strategy;
 const { userModel } = require("../Models/user.model");
 
 export const loginStrategyName = 'login';
@@ -71,16 +72,17 @@ passport.use(
     ),
 );
   
-passport.serializeUser((user:any, done:any) =>{ 
-    console.log("serializeUser");    
-    done(null, user);
-});
-  
-passport.deserializeUser(async (user:any, done:any) => {
-    console.log("deserializeUser");
-    done(null, await findUser(user.name));
-});
+passport.use(new passportFacebook({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+    profileFields: ['id', 'displayName', 'email', 'first_name', 'last_name', 'middle_name', 'picture.type(large)'],
+}, (_accessToken:any, _refreshToken:any, profile:any, done:any) => done(null, profile)));
 
+
+passport.serializeUser((user:any, done:any) => done(null, user));
+  
+passport.deserializeUser( (user:any, done:any) => done(null, user));
 export {passport}; 
 
 export const checkAuthentication = (request:any, response:any, next:any) => {
