@@ -1,0 +1,43 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css")
+        script(src="https://cdn.socket.io/4.0.1/socket.io.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js")
+        script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
+        title Products
+    body(class="bg-dark")
+        div(class="container-fluid d-flex justify-content-center pt-5" style="height: 100%;")
+            .col-9.bg-light.m-5.p-5.rounded
+                h2(class="text-center mb-5") Informacion 
+                div(class="row")
+                    div(class="col-12")
+                        p(class="text-center")
+                            | Bienvenido a la pagina de informacion
+                        .row
+                            .col-4
+                                div(class="list-group" id="list-tab" role="tablist")
+                                    a(class="list-group-item list-group-item-action active" id="list-argv-list" data-toggle="list" href="#list-argv" role="tab" aria-controls="argv") Argumentos de entrada
+                                    a(class="list-group-item list-group-item-action" id="list-platform-list" data-toggle="list" href="#list-platform" role="tab" aria-controls="platform") Nombre de la Plataforma
+                                    a(class="list-group-item list-group-item-action" id="list-version-list" data-toggle="list" href="#list-version" role="tab" aria-controls="version") Version de node
+                                    a(class="list-group-item list-group-item-action" id="list-memory-list" data-toggle="list" href="#list-memory" role="tab" aria-controls="memory") Uso de memoria
+                                    a(class="list-group-item list-group-item-action" id="list-path-list" data-toggle="list" href="#list-path" role="tab" aria-controls="path") Path de ejecucion
+                                    a(class="list-group-item list-group-item-action" id="list-id-list" data-toggle="list" href="#list-id" role="tab" aria-controls="id") Process id
+
+                            .col-8
+                                div(class="tab-content" id="nav-tabContent")
+                                    div(class="tab-pane fade show active" id="list-argv" role="tabpanel" aria-labelledby="list-argv-list") #{argv}
+                                    div(class="tab-pane fade" id="list-platform" role="tabpanel" aria-labelledby="list-platform-list") #{platform}
+                                    div(class="tab-pane fade" id="list-version" role="tabpanel" aria-labelledby="list-version-list") #{version}
+                                    div(class="tab-pane fade p-2" id="list-memory" role="tabpanel" aria-labelledby="list-memory-list" style="overflow-wrap: break-word;") #{memoria}
+                                    div(class="tab-pane fade" id="list-path" role="tabpanel" aria-labelledby="list-path-list") #{path}
+                                    div(class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list") #{id}
+    
+                
+         
+

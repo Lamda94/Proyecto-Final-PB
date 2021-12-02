@@ -73,8 +73,8 @@ passport.use(
 );
   
 passport.use(new passportFacebook({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    clientID: process.argv[3] || process.env.FACEBOOK_APP_ID,
+    clientSecret: process.argv[4] || process.env.FACEBOOK_APP_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     profileFields: ['id', 'displayName', 'email', 'first_name', 'last_name', 'middle_name', 'picture.type(large)'],
 }, (_accessToken:any, _refreshToken:any, profile:any, done:any) => done(null, profile)));

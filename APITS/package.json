@@ -6,7 +6,7 @@
   "scripts": {
     "ServerES6toJS5": "./node_modules/.bin/babel ./server.es6.js -o ./server.js",
     "ServerTStoJS5": "./node_modules/.bin/tsc",
-    "dev": "nodemon server.js",
+    "dev": "nodemon server.js 3000",
     "start": "node server.js"
   },
   "author": "<Luis Mendez : Lamda94@gmail.com>",

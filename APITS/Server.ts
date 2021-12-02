@@ -5,6 +5,7 @@ const passport = require('passport');
 require('./Middlewares/Login.middleware').passport;
 const products = require("./Routes/products.routes.js");
 const acces = require('./Routes/acces.routes.js');
+const info = require('./Routes/info.routes.js');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
 const cors = require('cors');
@@ -39,11 +40,12 @@ app.set("view engine", "pug");
 
 app.use("/cart", cart);
 app.use("/products", products);
+app.use("/info", info);
 app.use("/", acces);
 app.use(notFound);
 
-const PORT:number = 8080;
-server.listen(PORT, ()=>console.log(`App start on http://localhost:8080`));
+const PORT:any = process.argv[2] || 8080;
+server.listen(PORT, ()=>console.log(`App start on http://localhost:${PORT}`));
 server.on("error", (err:object)=>console.log(`Error on server: ${err}`));
 
 module.exports = { server };
