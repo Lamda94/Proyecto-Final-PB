@@ -9,5 +9,5 @@ var userSchema = new Schema({
     name: String,
     password: String,
 });
-var userModel = mongoose_1.default.model("user", userSchema);
+var userModel = mongoose_1.default.model("users", userSchema);
 module.exports = { userModel: userModel };

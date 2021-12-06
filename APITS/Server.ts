@@ -2,12 +2,11 @@ const cart = require('./Routes/cart.routes');
 const session = require('express-session');
 const handlebars = require("express-handlebars");
 const passport = require('passport');
-require('./Middlewares/Login.middleware').passport;
 const products = require("./Routes/products.routes.js");
-const acces = require('./Routes/acces.routes.js');
 const info = require('./Routes/info.routes.js');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
+const flash = require('connect-flash');
 const cors = require('cors');
 const {notFound} = require("./Middlewares/routeNotFound");
 const { ioServer, app, server} = require("./Server/IOServer");
@@ -33,6 +32,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(cors());
 
 app.set("views", __dirname + "/Views");
@@ -41,11 +41,13 @@ app.set("view engine", "pug");
 app.use("/cart", cart);
 app.use("/products", products);
 app.use("/info", info);
-app.use("/", acces);
+require('./Middlewares/passport')(passport);
+require('./Routes/acces.routes.js')(app, passport)
 app.use(notFound);
 
 const PORT:any = process.argv[2] || 8080;
 server.listen(PORT, ()=>console.log(`App start on http://localhost:${PORT}`));
 server.on("error", (err:object)=>console.log(`Error on server: ${err}`));
+
 
 module.exports = { server };

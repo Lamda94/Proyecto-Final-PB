@@ -36,15 +36,17 @@ html(lang="en")
                     h2(class="text-center mb-5") Login
                     form(action="/login" method="post")
                         .mb-3.row
-                            label(for="inputPassword" class="col-sm-2 col-form-label") Name
+                            label(for="inputName" class="col-sm-2 col-form-label") Name
                             .col-sm-10
-                                input(type="text" class="form-control" name="name")
+                                input(type="text" class="form-control" name="username" required)
                         .mb-3.row
                             label(for="inputPassword" class="col-sm-2 col-form-label") Password
                             .col-sm-10
-                                input(type="password" class="form-control" name="password")
+                                input(type="password" class="form-control" id="password" name="password" required)
                         button(class="btn btn-primary" type="submit") Login
                         br
                         a(href="/auth/facebook" class="mt1") login whith facebook
+                        br
+                        a(href="/signup" class="mt1") Signup
          
 

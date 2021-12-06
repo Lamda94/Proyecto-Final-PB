@@ -10,12 +10,14 @@ const ioServer = require("socket.io")(server);
 const { chatMenssage } = require("../Class/Chat/chat.class");
 const productClass = require("../Class/products.js");
 const {product} = productClass.init(persis);
-
+const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 
 const url = __dirname.replace("Server", "\public");
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(express.static(url));
 
 const chatNormalized = async():Promise<any>=>{
@@ -24,7 +26,7 @@ const chatNormalized = async():Promise<any>=>{
     const chatSchema = new schema.Entity('menssages', {
         author: authorSchema,
     });
-    const chatListSchema = new schema.Array(chatSchema);
+    const chatListSchema = new schema.Array(chatSchema); 
     const menssage = normalize(data, chatListSchema);
     return menssage;
 };

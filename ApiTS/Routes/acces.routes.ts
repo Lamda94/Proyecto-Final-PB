@@ -1,70 +1,87 @@
-import  express from "express";
-import { checkAuthentication, loginStrategyName, signUpStrategyName, passport } from "../Middlewares/Login.middleware";
-
-const router = express.Router();
-
-router.get("/login", async(req:any, res:any) => {
-    if (req.session.passport) {
-        const d:any = JSON.parse(JSON.stringify(req.user._json));
-        req.session.name = d.first_name;
-        req.session.method = "facebook";  
-
-        const data = {
-            login: true,
-            saludo: "Bienvenido "+req.session.name,
-            logout: false
+module.exports = (app:any, passport:any) => {
+    const checkAuthentication = (request:any, response:any, next:any) => {
+        if (request.isAuthenticated()) {
+        return next();
         }
-        return res.render("index.pug", data);
-    }else if(req.session.name){
-        const data = {
-            login: true,
-            saludo: "Bienvenido "+req.session.name,
-            logout: false
+    
+        return response
+        .redirect(302, '/login');
+    };
+
+    app.get('/', checkAuthentication, (req:any, res:any) => {
+        if(req.session.name){
+            const data = {
+                login: true,
+                saludo: "Bienvenido "+req.session.name,
+                logout: false
+            }
+            return res.render("index.pug", data);
+        }else{
+            req.session.name = req.user.name;
+            req.session.method = "facebook";  
+
+            const data = {
+                login: true,
+                saludo: "Bienvenido "+req.session.name,
+                logout: false
+            }
+            return res.render("index.pug", data);
         }
-        return res.render("index.pug", data);
-    }else{
+    })
+
+    app.get("/login", (req:any, res:any) => {
         const data = {
             login: false,
             saludo: "",
             logout: false
         }
+        return res.render("index.pug", data);   
+    });
+
+    app.post("/login", passport.authenticate("Login",{failureRedirect: '/fail'}), async(req:any, res:any) => {
+        req.session.name = req.body.name;
+        req.session.password = req.body.password;  
+        return res.redirect("/");
+    });
+
+    app.get("/logout", (req:any, res:any) => {
+        const data = {
+            login: false,
+            saludo: "Hasta luego "+req.session.name,
+            logout: true
+        }
+        if (req.session.method === "facebook") {        
+            req.logout();
+        }
+        req.session.destroy();
+        
         return res.render("index.pug", data);
-    }    
-});
+    });
 
-router.post("/login", passport.authenticate(loginStrategyName), async(req:any, res:any) => {
-    req.session.name = req.body.name;
-    req.session.password = req.body.password;  
-    return res.redirect("/login");
-});
+    app.get('/auth/facebook', passport.authenticate('facebook', { authType: 'reauthenticate' }));
 
-router.get("/logout", async(req:any, res:any) => {
-    const data = {
-        login: false,
-        saludo: "Hasta luego "+req.session.name,
-        logout: true
-    }
-    if (req.session.method === "facebook") {        
-        req.logout();
-    }
-    req.session.destroy();
-    
-    return res.render("index.pug", data);
-});
+    app.get('/auth/facebook/callback',
+        passport.authenticate(
+            'facebook',
+            {
+            successRedirect: '/',
+            failureRedirect: '/faillogin',
+            },
+        ),
+    );
 
-router.get('/auth/facebook', passport.authenticate('facebook', { authType: 'reauthenticate' }));
+    app.get("/signup", (req:any, res:any) => res.render("signup.pug"));
 
-router.get('/auth/facebook/callback',
-    passport.authenticate(
-        'facebook',
-        {
-        successRedirect: '/login',
-        failureRedirect: '/faillogin',
-        },
-    ),
-);
+    app.post("/signup", passport.authenticate("Signup", { 
+        failureRedirect: '/fail', 
+        successRedirect: '/login', 
+        passReqToCallback: true,
+        failureFlash : true 
+    }));
 
-router.get("/signup", (req:any, res:any) => res.render("signup.pug"));
-
-router.post("/signup",passport.authenticate(signUpStrategyName, { failureRedirect: '/failsignup', successRedirect: '/login' }));
-module.exports = router;
+    app.get("/fail", (req:any, res:any) => {         
+        const msj = req.flash("signupMessage");
+        console.log(msj[0]);
+        res.render("fail.pug",{menssage: msj[0]})
+    });
+}

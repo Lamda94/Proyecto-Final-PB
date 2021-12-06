@@ -50,9 +50,12 @@ var ioServer = require("socket.io")(server);
 var chatMenssage = require("../Class/Chat/chat.class").chatMenssage;
 var productClass = require("../Class/products.js");
 var product = productClass.init(persis).product;
+var bodyParser = require("body-parser");
+var cookieParser = require('cookie-parser');
 var url = __dirname.replace("Server", "\public");
-app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express_1.default.static(url));
 var chatNormalized = function () { return __awaiter(void 0, void 0, void 0, function () {
     var data, authorSchema, chatSchema, chatListSchema, menssage;

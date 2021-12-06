@@ -35,57 +35,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var Login_middleware_1 = require("../Middlewares/Login.middleware");
-var router = express_1.default.Router();
-router.get("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var d, data, data, data;
-    return __generator(this, function (_a) {
-        if (req.session.passport) {
-            d = JSON.parse(JSON.stringify(req.user._json));
-            req.session.name = d.first_name;
-            req.session.method = "facebook";
-            data = {
-                login: true,
-                saludo: "Bienvenido " + req.session.name,
-                logout: false
-            };
-            return [2 /*return*/, res.render("index.pug", data)];
+module.exports = function (app, passport) {
+    var checkAuthentication = function (request, response, next) {
+        if (request.isAuthenticated()) {
+            return next();
         }
-        else if (req.session.name) {
-            data = {
+        return response
+            .redirect(302, '/login');
+    };
+    app.get('/', checkAuthentication, function (req, res) {
+        if (req.session.name) {
+            var data = {
                 login: true,
                 saludo: "Bienvenido " + req.session.name,
                 logout: false
             };
-            return [2 /*return*/, res.render("index.pug", data)];
+            return res.render("index.pug", data);
         }
         else {
-            data = {
-                login: false,
-                saludo: "",
+            req.session.name = req.user.name;
+            req.session.method = "facebook";
+            var data = {
+                login: true,
+                saludo: "Bienvenido " + req.session.name,
                 logout: false
             };
-            return [2 /*return*/, res.render("index.pug", data)];
+            return res.render("index.pug", data);
         }
-        return [2 /*return*/];
     });
-}); });
-router.post("/login", Login_middleware_1.passport.authenticate(Login_middleware_1.loginStrategyName), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        req.session.name = req.body.name;
-        req.session.password = req.body.password;
-        return [2 /*return*/, res.redirect("/login")];
+    app.get("/login", function (req, res) {
+        var data = {
+            login: false,
+            saludo: "",
+            logout: false
+        };
+        return res.render("index.pug", data);
     });
-}); });
-router.get("/logout", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
-    return __generator(this, function (_a) {
-        data = {
+    app.post("/login", passport.authenticate("Login", { failureRedirect: '/fail' }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            req.session.name = req.body.name;
+            req.session.password = req.body.password;
+            return [2 /*return*/, res.redirect("/")];
+        });
+    }); });
+    app.get("/logout", function (req, res) {
+        var data = {
             login: false,
             saludo: "Hasta luego " + req.session.name,
             logout: true
@@ -94,14 +88,23 @@ router.get("/logout", function (req, res) { return __awaiter(void 0, void 0, voi
             req.logout();
         }
         req.session.destroy();
-        return [2 /*return*/, res.render("index.pug", data)];
+        return res.render("index.pug", data);
     });
-}); });
-router.get('/auth/facebook', Login_middleware_1.passport.authenticate('facebook', { authType: 'reauthenticate' }));
-router.get('/auth/facebook/callback', Login_middleware_1.passport.authenticate('facebook', {
-    successRedirect: '/login',
-    failureRedirect: '/faillogin',
-}));
-router.get("/signup", function (req, res) { return res.render("signup.pug"); });
-router.post("/signup", Login_middleware_1.passport.authenticate(Login_middleware_1.signUpStrategyName, { failureRedirect: '/failsignup', successRedirect: '/login' }));
-module.exports = router;
+    app.get('/auth/facebook', passport.authenticate('facebook', { authType: 'reauthenticate' }));
+    app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        successRedirect: '/',
+        failureRedirect: '/faillogin',
+    }));
+    app.get("/signup", function (req, res) { return res.render("signup.pug"); });
+    app.post("/signup", passport.authenticate("Signup", {
+        failureRedirect: '/fail',
+        successRedirect: '/login',
+        passReqToCallback: true,
+        failureFlash: true
+    }));
+    app.get("/fail", function (req, res) {
+        var msj = req.flash("signupMessage");
+        console.log(msj[0]);
+        res.render("fail.pug", { menssage: msj[0] });
+    });
+};
