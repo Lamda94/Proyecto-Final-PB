@@ -4,6 +4,7 @@ const handlebars = require("express-handlebars");
 const passport = require('passport');
 const products = require("./Routes/products.routes.js");
 const info = require('./Routes/info.routes.js');
+const random = require('./Routes/random.routes.js');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
 const flash = require('connect-flash');
@@ -41,6 +42,7 @@ app.set("view engine", "pug");
 app.use("/cart", cart);
 app.use("/products", products);
 app.use("/info", info);
+app.use("/random", random);
 require('./Middlewares/passport')(passport);
 require('./Routes/acces.routes.js')(app, passport)
 app.use(notFound);
