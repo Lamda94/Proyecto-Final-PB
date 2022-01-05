@@ -1,4 +1,5 @@
 "use strict";
+var cpus = require('os').cpus().length;
 var getInfo = function (req, res) {
     var data = {
         argv: process.argv.slice(2) || null,
@@ -7,6 +8,7 @@ var getInfo = function (req, res) {
         memoria: JSON.stringify(process.memoryUsage()),
         path: process.cwd(),
         id: process.pid,
+        cpus: cpus,
     };
     res.render('info.pug', data);
 };

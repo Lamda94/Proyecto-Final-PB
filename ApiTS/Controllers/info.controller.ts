@@ -1,3 +1,5 @@
+const cpus = require('os').cpus().length;
+
 const  getInfo = (req:any, res:any) => {
     const data = {
         argv: process.argv.slice(2) || null,
@@ -6,6 +8,7 @@ const  getInfo = (req:any, res:any) => {
         memoria:  JSON.stringify(process.memoryUsage()),
         path: process.cwd(),
         id: process.pid,
+        cpus: cpus,
     };
 
     res.render('info.pug', data);

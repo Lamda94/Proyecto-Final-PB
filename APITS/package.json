@@ -6,8 +6,12 @@
   "scripts": {
     "ServerES6toJS5": "./node_modules/.bin/babel ./server.es6.js -o ./server.js",
     "ServerTStoJS5": "./node_modules/.bin/tsc",
-    "dev": "nodemon server.js 3000",
-    "start": "node server.js"
+    "dev": "nodemon server.js 8080 CLUSTER",
+    "start": "node server.js",
+    "foreverC": "forever start -w Server.js 8080 CLUSTER",
+    "foreverF": "forever start -w Server.js 8080 FORK",
+    "PM2C": "pm2 start Server.js --name='Server CLUSTER' --watch -- 8080 CLUSTER",
+    "PM2F": "pm2 start Server.js --name='Server FORK' --watch -- 8080 FORK"
   },
   "author": "<Luis Mendez : Lamda94@gmail.com>",
   "license": "MIT",

@@ -9,17 +9,17 @@ class User{
 
     async getUser(name:any = false): Promise<[]>{
         try {
-            console.log("entro a getUser:",name);            
+            //console.log("entro a getUser:",name);            
             let i = 1;
             await mongoose.connect(this.MDBURI);
             if (name) { 
-                console.log("ingreso a name");
+                //console.log("ingreso a name");
                             
                 const response:[] = await userModel.find({name:name});    
                 if (response.length > 0) {
                     return response;
                 }
-                console.log("response", response);
+                //console.log("response", response);
                  
                 return response;
             }else{               
@@ -42,13 +42,13 @@ class User{
 
     async addUser(data:any):Promise<[]>{   
         try {            
-            console.log("entro a addUser");     
+            //console.log("entro a addUser");     
             const res:[] = await this.getUser(data.name);                    
             if (res.length > 0) {
                 throw {status: 400, menssage: "El usuario ya existe"};
             }else{   
                 await mongoose.connect(this.MDBURI);
-                console.log("data", data);       
+                //console.log("data", data);       
                 await userModel.insertMany([{
                     name: data.name,
                     password: data.password,
@@ -65,10 +65,10 @@ class User{
 
     async getUserById(id:any):Promise<[]>{
         try {
-            console.log("entro a getUserById");
+            //console.log("entro a getUserById");
             await mongoose.connect(this.MDBURI);
             const response:[] = await userModel.findById(id);
-            console.log("response", response);            
+            //console.log("response", response);            
             return response;
         } catch (err) {
             throw {status: 500, menssage: "Error de base de datos", error:err};

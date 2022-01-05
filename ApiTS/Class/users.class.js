@@ -55,20 +55,18 @@ var User = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 6, 7, 9]);
-                        console.log("entro a getUser:", name);
                         i = 1;
                         return [4 /*yield*/, mongoose_1.default.connect(this.MDBURI)];
                     case 1:
                         _a.sent();
                         if (!name) return [3 /*break*/, 3];
-                        console.log("ingreso a name");
                         return [4 /*yield*/, userModel.find({ name: name })];
                     case 2:
                         response = _a.sent();
                         if (response.length > 0) {
                             return [2 /*return*/, response];
                         }
-                        console.log("response", response);
+                        //console.log("response", response);
                         return [2 /*return*/, response];
                     case 3: return [4 /*yield*/, userModel.find()];
                     case 4:
@@ -101,7 +99,6 @@ var User = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 7, 8, 10]);
-                        console.log("entro a addUser");
                         return [4 /*yield*/, this.getUser(data.name)];
                     case 1:
                         res = _a.sent();
@@ -110,12 +107,13 @@ var User = /** @class */ (function () {
                     case 2: return [4 /*yield*/, mongoose_1.default.connect(this.MDBURI)];
                     case 3:
                         _a.sent();
-                        console.log("data", data);
+                        //console.log("data", data);       
                         return [4 /*yield*/, userModel.insertMany([{
                                     name: data.name,
                                     password: data.password,
                                 }])];
                     case 4:
+                        //console.log("data", data);       
                         _a.sent();
                         return [4 /*yield*/, this.getUser(data.name)];
                     case 5:
@@ -141,14 +139,15 @@ var User = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, 4, 6]);
-                        console.log("entro a getUserById");
+                        //console.log("entro a getUserById");
                         return [4 /*yield*/, mongoose_1.default.connect(this.MDBURI)];
                     case 1:
+                        //console.log("entro a getUserById");
                         _a.sent();
                         return [4 /*yield*/, userModel.findById(id)];
                     case 2:
                         response = _a.sent();
-                        console.log("response", response);
+                        //console.log("response", response);            
                         return [2 /*return*/, response];
                     case 3:
                         err_3 = _a.sent();

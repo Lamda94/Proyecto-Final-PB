@@ -81,7 +81,7 @@ module.exports = (app:any, passport:any) => {
 
     app.get("/fail", (req:any, res:any) => {         
         const msj = req.flash("signupMessage");
-        console.log(msj[0]);
+        //console.log(msj[0]);
         res.render("fail.pug",{menssage: msj[0]})
     });
 }

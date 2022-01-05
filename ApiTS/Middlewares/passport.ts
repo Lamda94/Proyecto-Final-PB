@@ -17,7 +17,7 @@ module.exports = (passport:any) => {
               try {
                 const user = await Users.getUser(username);
                 if(user.length > 0) {
-                  console.log("User already exists");                  
+                  //console.log("User already exists");                  
                   return done(null, false, req.flash('signupMessage', 'User already exists'));
                 }   
                 const newUser = await Users.addUser({name:username, password:createHash(password)});
@@ -84,7 +84,7 @@ module.exports = (passport:any) => {
     // Deserialize
     passport.deserializeUser(async(id:any, done:any) =>{ 
         try {
-          console.log("id",id);          
+          //console.log("id",id);          
           const result = await Users.getUserById(id);
           return done(null, result);
         } catch (error) {

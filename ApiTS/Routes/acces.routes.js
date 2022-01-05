@@ -104,7 +104,7 @@ module.exports = function (app, passport) {
     }));
     app.get("/fail", function (req, res) {
         var msj = req.flash("signupMessage");
-        console.log(msj[0]);
+        //console.log(msj[0]);
         res.render("fail.pug", { menssage: msj[0] });
     });
 };

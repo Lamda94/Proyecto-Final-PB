@@ -57,7 +57,7 @@ module.exports = function (passport) {
                 case 1:
                     user = _a.sent();
                     if (user.length > 0) {
-                        console.log("User already exists");
+                        //console.log("User already exists");                  
                         return [2 /*return*/, done(null, false, req.flash('signupMessage', 'User already exists'))];
                     }
                     return [4 /*yield*/, Users.addUser({ name: username, password: createHash(password) })];
@@ -149,7 +149,6 @@ module.exports = function (passport) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    console.log("id", id);
                     return [4 /*yield*/, Users.getUserById(id)];
                 case 1:
                     result = _a.sent();

@@ -28,6 +28,7 @@ html(lang="en")
                                     a(class="list-group-item list-group-item-action" id="list-memory-list" data-toggle="list" href="#list-memory" role="tab" aria-controls="memory") Uso de memoria
                                     a(class="list-group-item list-group-item-action" id="list-path-list" data-toggle="list" href="#list-path" role="tab" aria-controls="path") Path de ejecucion
                                     a(class="list-group-item list-group-item-action" id="list-id-list" data-toggle="list" href="#list-id" role="tab" aria-controls="id") Process id
+                                    a(class="list-group-item list-group-item-action" id="list-cpus-list" data-toggle="list" href="#list-cpus" role="tab" aria-controls="cpus") Cpus
 
                             .col-8
                                 div(class="tab-content" id="nav-tabContent")
@@ -37,6 +38,7 @@ html(lang="en")
                                     div(class="tab-pane fade p-2" id="list-memory" role="tabpanel" aria-labelledby="list-memory-list" style="overflow-wrap: break-word;") #{memoria}
                                     div(class="tab-pane fade" id="list-path" role="tabpanel" aria-labelledby="list-path-list") #{path}
                                     div(class="tab-pane fade" id="list-id" role="tabpanel" aria-labelledby="list-id-list") #{id}
+                                    div(class="tab-pane fade" id="list-cpus" role="tabpanel" aria-labelledby="list-cpus-list") #{cpus}
     
                 
          
