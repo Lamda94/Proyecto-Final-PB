@@ -3,7 +3,7 @@ const clust = process.argv[3] || "FORK";
 
 if(clust === "FORK"){
   const {server} = require("./Server.config.js");
-  server.listen(PORT, ()=>console.log(`App start on http://localhost:${PORT}`));  
+  server.listen(PORT, ()=>console.log(`App start on http://localhost:${PORT} - PID:${process.pid}`));  
   server.on("error", (err:object)=>console.log(`Error on server: ${err}`));
 }else if(clust === "CLUSTER"){
   const cluster = require('cluster');
@@ -19,7 +19,7 @@ if(clust === "FORK"){
       console.log(`Worker ${worker.process.pid} is online`);
     });
   }else{
-    server.listen(PORT, ()=>console.log(`App start on http://localhost:${PORT}`));  
+    server.listen(PORT, ()=>console.log(`App start on http://localhost:${PORT} PID:${process.pid}`));  
     server.on("error", (err:object)=>console.log(`Error on server: ${err}`));
   }
 }

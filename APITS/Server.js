@@ -3,7 +3,7 @@ var PORT = process.argv[2] || 8080;
 var clust = process.argv[3] || "FORK";
 if (clust === "FORK") {
     var server_1 = require("./Server.config.js").server;
-    server_1.listen(PORT, function () { return console.log("App start on http://localhost:" + PORT); });
+    server_1.listen(PORT, function () { return console.log("App start on http://localhost:" + PORT + " - PID:" + process.pid); });
     server_1.on("error", function (err) { return console.log("Error on server: " + err); });
 }
 else if (clust === "CLUSTER") {
@@ -20,7 +20,7 @@ else if (clust === "CLUSTER") {
         });
     }
     else {
-        server_2.listen(PORT, function () { return console.log("App start on http://localhost:" + PORT); });
+        server_2.listen(PORT, function () { return console.log("App start on http://localhost:" + PORT + " PID:" + process.pid); });
         server_2.on("error", function (err) { return console.log("Error on server: " + err); });
     }
 }
